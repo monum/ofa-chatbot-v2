@@ -339,7 +339,7 @@
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "Which benefit program would you like to learn more about?\n\nA. Supplemental Nutrition Assistance Program (SNAP)\nB. Women, Infants, and Children Nutrition Program (WIC)\nC. Healthy Incentive Program (HIP)\nD. Double Up Food Bucks Stores\n\nI can only respond to one option at a time, but we will be able to come back to these options later. Please respond with A, B, C, D, GO BACK or STOP.",
+        "body": "Which benefit program would you like to learn more about?\n\nA. Supplemental Nutrition Assistance Program (SNAP)\nB. Women, Infants, and Children Nutrition Program (WIC)\nC. Healthy Incentive Program (HIP)\nD. Double Up Food Bucks Stores\n\nI can only respond to one option at a time, but we will be able to come back to these options later. Please respond with A, B, C, D, GO BACK or END SESSION.",
         "timeout": "3600"
       }
     },
@@ -430,8 +430,8 @@
               "arguments": [
                 "{{widgets.askBenefit.inbound.Body}}"
               ],
-              "type": "equal_to",
-              "value": "STOP"
+              "type": "matches_any_of",
+              "value": "End, End Session"
             }
           ]
         }
@@ -467,7 +467,7 @@
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "Are you looking to pick up affordable or free food? You can pick up free or affordable food at several locations throughout the City. \n\nA. Food Pantries (FREE)\nB. Farmers Markets (AFFORDABLE WITH SNAP + HIP)\nC. Youth Meal Sites (FREE)\nD. Fair Foods ($2 GROCERY BAGS)\nE. Mobile Farmers Market (AFFORDABLE WITH SNAP + HIP)\nF. Boston Double Up Food Bucks Stores (SNAP)\n\nRespond one of the following: A, B, C, D, E, F, PREVIOUS MENU, or STOP.",
+        "body": "Are you looking to pick up affordable or free food? You can pick up free or affordable food at several locations throughout the City. \n\nA. Food Pantries (FREE)\nB. Farmers Markets (AFFORDABLE WITH SNAP + HIP)\nC. Youth Meal Sites (FREE)\nD. Fair Foods ($2 GROCERY BAGS)\nE. Mobile Farmers Market (AFFORDABLE WITH SNAP + HIP)\nF. Boston Double Up Food Bucks Stores (SNAP)\n\nRespond one of the following: A, B, C, D, E, F, GO BACK, or END SESSION.",
         "timeout": "3600"
       }
     },
@@ -573,7 +573,7 @@
                 "{{widgets.askPickup.inbound.Body}}"
               ],
               "type": "equal_to",
-              "value": "PREVIOUS MENU"
+              "value": "Go Back"
             }
           ]
         },
@@ -586,8 +586,8 @@
               "arguments": [
                 "{{widgets.askPickup.inbound.Body}}"
               ],
-              "type": "equal_to",
-              "value": "STOP"
+              "type": "matches_any_of",
+              "value": "End, End Session"
             }
           ]
         }
@@ -629,7 +629,7 @@
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "splitLearnmore",
+          "next": "splitLearnMore",
           "event": "incomingMessage"
         },
         {
@@ -652,10 +652,11 @@
       }
     },
     {
-      "name": "splitLearnmore",
+      "name": "splitLearnMore",
       "type": "split-based-on",
       "transitions": [
         {
+          "next": "errorLearnMore",
           "event": "noMatch"
         },
         {
@@ -844,7 +845,7 @@
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "splitSNAP",
+          "next": "splitSNAP2",
           "event": "incomingMessage"
         },
         {
@@ -867,7 +868,7 @@
       }
     },
     {
-      "name": "splitSNAP",
+      "name": "splitSNAP2",
       "type": "split-based-on",
       "transitions": [
         {
@@ -907,7 +908,7 @@
         "input": "{{widgets.askSNAP.inbound.Body}}",
         "offset": {
           "x": -1000,
-          "y": 2750
+          "y": 2760
         }
       }
     },
@@ -1107,8 +1108,8 @@
       ],
       "properties": {
         "offset": {
-          "x": -1370,
-          "y": 2760
+          "x": -1870,
+          "y": 2770
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
@@ -1234,7 +1235,7 @@
       "properties": {
         "input": "{{trigger.message.Body}}",
         "offset": {
-          "x": 440,
+          "x": 460,
           "y": -660
         }
       }
@@ -1396,7 +1397,7 @@
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "splitSNAP",
+          "next": "splitSNAP1",
           "event": "incomingMessage"
         },
         {
@@ -1464,6 +1465,75 @@
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
         "body": "No problem. If you have questions regarding the program, visit https://www.mass.gov/snap-benefits-formerly-food-stamps/ or call Project Bread at 1-800-645-8333. They can help you answer questions in 150 languages."
+      }
+    },
+    {
+      "name": "splitSNAP1",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "errorSNAP",
+          "event": "noMatch"
+        },
+        {
+          "next": "sendSNAPEnroll",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value equal_to Y, Yes, Si",
+              "arguments": [
+                "{{widgets.sendSNAP.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "Y, Yes, Si"
+            }
+          ]
+        },
+        {
+          "next": "sendSNAPNoEnroll",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "If value matches_any_of N, No",
+              "arguments": [
+                "{{widgets.sendSNAP.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "N, No"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sendSNAP.inbound.Body}}",
+        "offset": {
+          "x": -1540,
+          "y": 2760
+        }
+      }
+    },
+    {
+      "name": "errorLearnMore",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "splitLearnMore",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1440,
+          "y": 1210
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Sorry, that option is not currently supported. Please try again."
       }
     }
   ],
