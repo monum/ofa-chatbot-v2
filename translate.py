@@ -14,7 +14,7 @@ with open('flow.json', 'rt') as f:
 
     for i in range(len(data['states'])):
         try:
-            data['states'][i]['properties']['body'] = unicode(translations[i], "utf-8")
+            data['states'][i]['properties']['body'] = str(translations[i])
         except KeyError:
             print('Nothing here!')
             data['states'][i]['properties']['body'] = ''
