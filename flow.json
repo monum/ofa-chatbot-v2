@@ -70,7 +70,7 @@
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "What language would you prefer to receive these messages in?\n\n1. Spanish (Latin American)\n2. Simplified Chinese\n3. Haitian Creole\n4. Vietnamese\n5. Cabo Verdean Creole \n6. Portuguese (Brazilian)\n7. Russian\n8. Arabic\n9. French\n10. Somali",
+        "body": "What language would you prefer to receive these messages in?\n\n0. English\n1. Spanish (Latin American)\n2. Simplified Chinese\n3. Haitian Creole\n4. Vietnamese\n5. Cabo Verdean Creole \n6. Portuguese (Brazilian)\n7. Russian\n8. Arabic\n9. French\n10. Somali",
         "timeout": "3600"
       }
     },
@@ -152,7 +152,7 @@
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "splitLearnAbout",
+          "next": "getLearn",
           "event": "incomingMessage"
         },
         {
@@ -192,7 +192,7 @@
                 "{{widgets.askLearnAbout.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "1, Benefit Programs, Benefits"
+              "value": "1, Benefit Programs, Benefits, Benefit"
             }
           ]
         },
@@ -228,7 +228,7 @@
       "properties": {
         "input": "{{widgets.askLearnAbout.inbound.Body}}",
         "offset": {
-          "x": -670,
+          "x": -660,
           "y": 1480
         }
       }
@@ -307,7 +307,7 @@
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "splitBenefit",
+          "next": "getBenefit",
           "event": "incomingMessage"
         },
         {
@@ -319,8 +319,8 @@
       ],
       "properties": {
         "offset": {
-          "x": -670,
-          "y": 1760
+          "x": -710,
+          "y": 1720
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
@@ -402,7 +402,7 @@
               "arguments": [
                 "{{widgets.askBenefit.inbound.Body}}"
               ],
-              "type": "equal_to",
+              "type": "matches_any_of",
               "value": "Go Back, Back"
             }
           ]
@@ -435,7 +435,7 @@
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "splitPickup",
+          "next": "getPickup",
           "event": "incomingMessage"
         },
         {
@@ -558,7 +558,7 @@
               "arguments": [
                 "{{widgets.askPickup.inbound.Body}}"
               ],
-              "type": "equal_to",
+              "type": "matches_any_of",
               "value": "Go Back, Back"
             }
           ]
@@ -915,8 +915,8 @@
       ],
       "properties": {
         "offset": {
-          "x": 20,
-          "y": 2490
+          "x": 10,
+          "y": 2540
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
@@ -1251,8 +1251,8 @@
       "properties": {
         "input": "{{widgets.askEnglishLanguage.inbound.Body}}",
         "offset": {
-          "x": 1530,
-          "y": 540
+          "x": 1040,
+          "y": 530
         }
       }
     },
@@ -1443,7 +1443,7 @@
       ],
       "properties": {
         "offset": {
-          "x": -640,
+          "x": -560,
           "y": 3010
         },
         "service": "{{trigger.message.InstanceSid}}",
@@ -1520,6 +1520,105 @@
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
         "body": "Sorry, that option is not currently supported. Please try again."
+      }
+    },
+    {
+      "name": "getBenefit",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "splitBenefit",
+          "event": "success"
+        },
+        {
+          "next": "splitBenefit",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1500,
+          "y": 1540
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "parameters": [
+          {
+            "value": "{{widgets.askBenefit.inbound.Body}}",
+            "key": "benefitchoice"
+          },
+          {
+            "value": "{{widgets.askBenefit.inbound.From}}",
+            "key": "PhoneNumber"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/write-ofa"
+      }
+    },
+    {
+      "name": "getPickup",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "splitPickup",
+          "event": "success"
+        },
+        {
+          "next": "splitPickup",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 170,
+          "y": 1770
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "parameters": [
+          {
+            "value": "{{widgets.askPickup.inbound.Body}}",
+            "key": "pickupchoice"
+          },
+          {
+            "value": "{{widgets.askPickup.inbound.From}}",
+            "key": "PhoneNumber"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/write-ofa"
+      }
+    },
+    {
+      "name": "getLearn",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "splitLearnAbout",
+          "event": "success"
+        },
+        {
+          "next": "splitLearnAbout",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -160,
+          "y": 1420
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "parameters": [
+          {
+            "value": "{{widgets.askLearnAbout.inbound.Body}}",
+            "key": "learnchoice"
+          },
+          {
+            "value": "{{widgets.askLearnAbout.inbound.From}}",
+            "key": "PhoneNumber"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/write-ofa"
       }
     }
   ],
