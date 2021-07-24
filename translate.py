@@ -3,7 +3,7 @@ import csv
 
 translations = []
 
-with open('spanish.csv', 'rt') as f:
+with open('OFA_Chatbot v2_Translations.xlsx - Translation Sheet.csv', 'rt') as f:
         reader = csv.DictReader(f, delimiter=',')
 
         for row in reader:
