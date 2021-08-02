@@ -1,1487 +1,1524 @@
 {
-    "states": [
+  "description": "ofa-chatbotv2-Spanish",
+  "states": [
+    {
+      "name": "Trigger",
+      "type": "trigger",
+      "transitions": [
         {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitFoodorComida"
-                }, 
-                {
-                    "event": "incomingCall"
-                }, 
-                {
-                    "event": "incomingRequest", 
-                    "next": "sendEnglishOutgoing"
-                }
-            ], 
-            "type": "trigger", 
-            "name": "Trigger", 
-            "properties": {
-                "body": "No hay problema. \u00a1No me pondr\u00e9 en contacto con usted de nuevo! Puede enviar un mensaje de texto con la palabra \"COMIDA\" en cualquier momento si desea obtener informaci\u00f3n.", 
-                "offset": {
-                    "y": -950, 
-                    "x": 1110
-                }
-            }
-        }, 
+          "next": "splitFoodorComida",
+          "event": "incomingMessage"
+        },
         {
-            "transitions": [
-                {
-                    "event": "sent"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendNoThanks", 
-            "properties": {
-                "body": "\u00bfEn qu\u00e9 idioma preferir\u00eda recibir estos mensajes?\n\n1. Ingl\u00e9s\n2. Espa\u00f1ol", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 570, 
-                    "x": 300
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
+          "event": "incomingCall"
+        },
         {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitAllLanguages"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "askEnglishLanguage", 
-            "properties": {
-                "body": "Hola, soy el ChatBot de la Oficina de Acceso a Alimentos de Boston. \u00bfLe gustar\u00eda continuar en espa\u00f1ol? Por favor responda SI, NO o PARAR", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": 220, 
-                    "x": 1030
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitEnglish"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "sendIncomingEnglishWelcome", 
-            "properties": {
-                "body": "", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": -370, 
-                    "x": -380
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "next", 
-                    "next": "askLearnAbout"
-                }
-            ], 
-            "type": "set-variables", 
-            "name": "languageEnglish", 
-            "properties": {
-                "body": "Lo sentimos, esa opci\u00f3n no es compatible actualmente. Int\u00e9ntelo de nuevo.", 
-                "variables": [
-                    {
-                        "key": "language", 
-                        "value": "English"
-                    }
-                ], 
-                "offset": {
-                    "y": 250, 
-                    "x": -490
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "sendIncomingEnglishWelcome"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "errorEnglish", 
-            "properties": {
-                "body": "\u00bfSobre qu\u00e9 tipo de recursos busca obtener m\u00e1s informaci\u00f3n?  \n\n1. Programas de beneficios \n2. Donde recoger comida \n3. Domicilios de comida  o v\u00edveres de bajo costo  \n\nSolo puedo responder a una opci\u00f3n a la vez, pero podremos volver a estas opciones m\u00e1s adelante. Responda solo una opci\u00f3n 1, 2 o 3.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": -90, 
-                    "x": -880
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitLearnAbout"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "askLearnAbout", 
-            "properties": {
-                "body": "", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": 1220, 
-                    "x": -350
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch", 
-                    "next": "errorLearnAbout"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value matches_any_of 1, Benefit Programs, Benefits", 
-                            "arguments": [
-                                "{{widgets.askLearnAbout.inbound.Body}}"
-                            ], 
-                            "value": "1, Benefit Programs, Benefits"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "askBenefit"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value equal_to 2, ", 
-                            "arguments": [
-                                "{{widgets.askLearnAbout.inbound.Body}}"
-                            ], 
-                            "value": "2, Pickup, Pick Up, Where to Pick Up Food"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "askPickup"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value matches_any_of 3, Food Delivery, Delivery", 
-                            "arguments": [
-                                "{{widgets.askLearnAbout.inbound.Body}}"
-                            ], 
-                            "value": "3, Food Delivery, Delivery, Get Food Delivered"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendDelivery"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitLearnAbout", 
-            "properties": {
-                "body": "", 
-                "input": "{{widgets.askLearnAbout.inbound.Body}}", 
-                "offset": {
-                    "y": 1480, 
-                    "x": -670
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch", 
-                    "next": "errorEnglish"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "YES, Y", 
-                            "arguments": [
-                                "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}"
-                            ], 
-                            "value": "YES, Y"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "languageEnglish"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "NO", 
-                            "arguments": [
-                                "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}"
-                            ], 
-                            "value": "NO, N"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "askEnglishLanguage"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to STOP", 
-                            "arguments": [
-                                "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}"
-                            ], 
-                            "value": "STOP"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendNoThanks"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitEnglish", 
-            "properties": {
-                "body": "Lo sentimos, esa opci\u00f3n no es compatible actualmente. Int\u00e9ntelo de nuevo.", 
-                "input": "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}", 
-                "offset": {
-                    "y": -100, 
-                    "x": -380
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askLearnAbout"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "errorLearnAbout", 
-            "properties": {
-                "body": "\u00bfSobre cu\u00e1l programa le gustar\u00eda obtener informaci\u00f3n?\n\nA. Programa de asistencia nutricional suplementaria (SNAP)\nB. Programa de nutrici\u00f3n para mujeres, beb\u00e9s y ni\u00f1os (WIC)\nC. Programa de incentivos saludables (HIP)\nD. Tiendas Double Up Food Bucks\n\nSolo puedo responder a una opci\u00f3n a la vez, pero podremos volver a estas opciones m\u00e1s adelante. Responda solo una opci\u00f3n A, B, C, D, ATRAS o PARAR", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 1220, 
-                    "x": -1040
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitBenefit"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "askBenefit", 
-            "properties": {
-                "body": "", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": 1760, 
-                    "x": -670
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch", 
-                    "next": "errorBenefit"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to A", 
-                            "arguments": [
-                                "{{widgets.askBenefit.inbound.Body}}"
-                            ], 
-                            "value": "A"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendSNAP"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to B", 
-                            "arguments": [
-                                "{{widgets.askBenefit.inbound.Body}}"
-                            ], 
-                            "value": "B"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendWIC"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to C", 
-                            "arguments": [
-                                "{{widgets.askBenefit.inbound.Body}}"
-                            ], 
-                            "value": "C"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendHIP"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to D", 
-                            "arguments": [
-                                "{{widgets.askBenefit.inbound.Body}}"
-                            ], 
-                            "value": "D"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendDoubleUp"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to PREVIOUS MENU", 
-                            "arguments": [
-                                "{{widgets.askBenefit.inbound.Body}}"
-                            ], 
-                            "value": "GO BACK"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "askLearnAbout"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to STOP", 
-                            "arguments": [
-                                "{{widgets.askBenefit.inbound.Body}}"
-                            ], 
-                            "value": "STOP"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendNoThanks"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitBenefit", 
-            "properties": {
-                "body": "\u00bfEst\u00e1 buscando comprar comida asequible o gratuita? Puede recoger comida gratuita o asequible en varios lugares de la ciudad.\n \nA. Despensas de alimentos (GRATIS)\nB. Mercados de agricultores (SNAP + HIP)\nC. Sitios de comidas para j\u00f3venes (GRATIS)\nD. Alimentos justos (bolsas de v\u00edveres de $2)\nE. Mercado de agricultores m\u00f3viles ( SNAP + HIP)\nF. Tiendas de Boston Double Up Food Bucks (SNAP)\n\nSolo puedo responder a una opci\u00f3n a la vez, pero podremos volver a estas opciones m\u00e1s adelante. Responda solo una opci\u00f3n A, B, C, D, E o F", 
-                "input": "{{widgets.askBenefit.inbound.Body}}", 
-                "offset": {
-                    "y": 1970, 
-                    "x": -1180
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitPickup"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "askPickup", 
-            "properties": {
-                "body": "", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": 1760, 
-                    "x": -320
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch", 
-                    "next": "errorPickup"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to A", 
-                            "arguments": [
-                                "{{widgets.askPickup.inbound.Body}}"
-                            ], 
-                            "value": "A"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendFoodPantry"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to B", 
-                            "arguments": [
-                                "{{widgets.askPickup.inbound.Body}}"
-                            ], 
-                            "value": "B"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendFarmersMarket"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to C", 
-                            "arguments": [
-                                "{{widgets.askPickup.inbound.Body}}"
-                            ], 
-                            "value": "C"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendYouthMeals"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to D", 
-                            "arguments": [
-                                "{{widgets.askPickup.inbound.Body}}"
-                            ], 
-                            "value": "D"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendFairFoods"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to E", 
-                            "arguments": [
-                                "{{widgets.askPickup.inbound.Body}}"
-                            ], 
-                            "value": "E"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendFreshTruck"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to F", 
-                            "arguments": [
-                                "{{widgets.askPickup.inbound.Body}}"
-                            ], 
-                            "value": "F"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendDoubleUp"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to PREVIOUS MENU", 
-                            "arguments": [
-                                "{{widgets.askPickup.inbound.Body}}"
-                            ], 
-                            "value": "PREVIOUS MENU"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "askLearnAbout"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to STOP", 
-                            "arguments": [
-                                "{{widgets.askPickup.inbound.Body}}"
-                            ], 
-                            "value": "STOP"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendNoThanks"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitPickup", 
-            "properties": {
-                "body": "Algunas de las opciones de entregas de alimentos asequibles en Boston son:\n\nFRIDAY FOOD MARKET: \nAhorre dinero en productos y ayude a reducir el desperdicio de alimentos comprando el exceso de productos de los distribuidores de alimentos de Boston. Reciba su producto al d\u00eda siguiente mediante entrega. Por solo $2. Para realizar pedidos en l\u00ednea, visite https://fridayfoodmarket.com/ \n\nDAILY TABLE: Productos con descuento y entregas gratuitas a lugares ubicados a 2 millas de sus tiendas. Use SNAP y Boston Double Up Food Bucks en sus ubicaciones. Para comprar en l\u00ednea, visite https://dailytable.org/shop/ .", 
-                "input": "{{widgets.askPickup.inbound.Body}}", 
-                "offset": {
-                    "y": 1970, 
-                    "x": -200
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askLearnMore"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendDelivery", 
-            "properties": {
-                "body": "\u00bfPuedo ayudarle con algo m\u00e1s? \u00bfLe gustar\u00eda obtener m\u00e1s informaci\u00f3n sobre otros recursos alimenticios? Responda SI o NO", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 1770, 
-                    "x": 780
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitLearnmore"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "askLearnMore", 
-            "properties": {
-                "body": "", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": 3030, 
-                    "x": 1040
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value matches_any_of Yes, Y, Si", 
-                            "arguments": [
-                                "{{widgets.askLearnMore.inbound.Body}}"
-                            ], 
-                            "value": "Yes, Y, Si"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "askLearnAbout"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value matches_any_of No, N", 
-                            "arguments": [
-                                "{{widgets.askLearnMore.inbound.Body}}"
-                            ], 
-                            "value": "No, N"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendNoThanks"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitLearnmore", 
-            "properties": {
-                "body": "SNAP proporciona un beneficio mensual para comprar alimentos nutritivos. Para obtener m\u00e1s informaci\u00f3n, visite https://www.mass.gov/snap-benefits-formerly-food-stamps/ o llame a Project Bread al 1-800-645-8333. Pueden ayudarlo a responder sus preguntas en 150 idiomas.", 
-                "input": "{{widgets.askLearnMore.inbound.Body}}", 
-                "offset": {
-                    "y": 1210, 
-                    "x": 820
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askSNAP"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendHIP", 
-            "properties": {
-                "body": "Todos los beneficiarios de SNAP pueden participar en HIP, sin necesidad de registrarse. Gaste sus d\u00f3lares de SNAP en frutas y verduras frescas en mercados de agricultores participantes. \u00a1El valor de su compra ser\u00e1 devuelto instant\u00e1neamente a su tarjeta EBT!\n\nEl beneficio depender\u00e1 del tama\u00f1o de su hogar. Un hogar de:\n1-2 personas puede recibir hasta $40 por mes. \n3-5 personas puede recibir hasta $60 por mes. \nPara m\u00e1s de 6 personas, puede recibir hasta $80 por mes. \n\nPara obtener m\u00e1s informaci\u00f3n, visite https://www.boston.gov/healthy-incentives/.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2220, 
-                    "x": -1010
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askBenefit"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendWIC", 
-            "properties": {
-                "body": "WIC es un programa de nutrici\u00f3n que brinda alimentos saludables, educaci\u00f3n nutricional, apoyo para la lactancia materna, atenci\u00f3n m\u00e9dica y otros servicios gratuitos para las familias que califican. Puede presentar una solicitud en l\u00ednea en https://www.mass.gov/forms/apply-for-wic-online/ o llamar al 1-800-942-1007 y al 617-721-6601 de lunes a viernes de 9am a 5pm.\n\nSi desea obtener m\u00e1s informaci\u00f3n sobre el programa, visite https://www.mass.gov/wic-information-for-participants/.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2220, 
-                    "x": -1360
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askSNAP"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendDoubleUp", 
-            "properties": {
-                "body": "Las tiendas Double Up Food Bucks ofrecen 50% de descuento en frutas y verduras a cualquier comprador de SNAP. Puede ahorrar hasta $ 10 por d\u00eda. Puede encontrar una tienda cerca de usted en https://www.boston.gov/double-up/.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2220, 
-                    "x": -680
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askPickup"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendFoodPantry", 
-            "properties": {
-                "body": "122 / 5000\nTranslation results\nVisite https://www.gbfb.org/need-food/ y busque por c\u00f3digo postal. Llame a la despensa antes de ir para verificar el horario. ", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2220, 
-                    "x": -330
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askHIP"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendFarmersMarket", 
-            "properties": {
-                "body": "Los mercados de agricultores son asequibles a trav\u00e9s de programas de beneficios como SNAP y HIP. Visite https://www.boston.gov/farmers-markets/ para encontrar un mercado cerca de usted.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2220, 
-                    "x": 0
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askPickup"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendYouthMeals", 
-            "properties": {
-                "body": "Estos sitios ofrecen desayuno y almuerzo a ni\u00f1os y j\u00f3venes menores de 18 a\u00f1os. No se requiere identificaci\u00f3n para recoger una comida. Para buscar ubicaciones, visite https://www.boston.gov/boston-eats/. Llame al sitio antes de ir para verificar el horario", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2220, 
-                    "x": 340
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitSNAP"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "askSNAP", 
-            "properties": {
-                "body": "\u00bfLe gustar\u00eda obtener informaci\u00f3n sobre c\u00f3mo inscribirse en SNAP? Responda S\u00cd o NO. ", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": 2530, 
-                    "x": -910
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch", 
-                    "next": "errorSNAP"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value equal_to Y, Yes, Si", 
-                            "arguments": [
-                                "{{widgets.askSNAP.inbound.Body}}"
-                            ], 
-                            "value": "Y, Yes, Si"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendSNAPEnroll"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value matches_any_of N, No", 
-                            "arguments": [
-                                "{{widgets.askSNAP.inbound.Body}}"
-                            ], 
-                            "value": "N, No"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendSNAPNoEnroll"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitSNAP", 
-            "properties": {
-                "body": "", 
-                "input": "{{widgets.askSNAP.inbound.Body}}", 
-                "offset": {
-                    "y": 2750, 
-                    "x": -1000
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitHIP"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "askHIP", 
-            "properties": {
-                "body": "\u00bfLe gustar\u00eda aprender sobre el Programa de Incentivos Saludables (HIP)? Responda S\u00cd o NO. ", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": 2490, 
-                    "x": 20
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch", 
-                    "next": "errorHIP"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value equal_to Y, Yes, Si", 
-                            "arguments": [
-                                "{{widgets.askHIP.inbound.Body}}"
-                            ], 
-                            "value": "Y, Yes, Si"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendHIP"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value matches_any_of N, No", 
-                            "arguments": [
-                                "{{widgets.askHIP.inbound.Body}}"
-                            ], 
-                            "value": "Go Back, Go, Back"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "askPickup"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to Stop", 
-                            "arguments": [
-                                "{{widgets.askHIP.inbound.Body}}"
-                            ], 
-                            "value": "Stop"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendNoThanks"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitHIP", 
-            "properties": {
-                "body": "", 
-                "input": "{{widgets.askHIP.inbound.Body}}", 
-                "offset": {
-                    "y": 2750, 
-                    "x": -100
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askPickup"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendFairFoods", 
-            "properties": {
-                "body": "Los sitios de Fair Foods ofrecen bolsas de productos frescos por solo $ 2. Para buscar ubicaciones cerca de usted, visite https://www.bit.ly/fairfoods20/", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2220, 
-                    "x": 690
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askHIP"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendFreshTruck", 
-            "properties": {
-                "body": "Fresh Truck es un mercado agr\u00edcola m\u00f3vil. SNAP y HIP est\u00e1n disponibles en sus ubicaciones. Para ver su horario, visite https://www.aboutfresh.org/fresh-truck/#schedule/.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2220, 
-                    "x": 1040
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askPickup"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "errorPickup", 
-            "properties": {
-                "body": "Lo sentimos, esa opci\u00f3n no es compatible actualmente. Int\u00e9ntelo de nuevo.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 1970, 
-                    "x": 960
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askBenefit"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "errorBenefit", 
-            "properties": {
-                "body": "Lo sentimos, esa opci\u00f3n no es compatible actualmente. Int\u00e9ntelo de nuevo.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 1970, 
-                    "x": -1550
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askSNAP"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "errorSNAP", 
-            "properties": {
-                "body": "Lo sentimos, esa opci\u00f3n no es compatible actualmente. Int\u00e9ntelo de nuevo.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2760, 
-                    "x": -1370
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askHIP"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "errorHIP", 
-            "properties": {
-                "body": "Lo sentimos, esa opci\u00f3n no es compatible actualmente. Int\u00e9ntelo de nuevo.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 2540, 
-                    "x": -410
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitEnglishOutgoing"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "sendEnglishOutgoing", 
-            "properties": {
-                "body": "Hola {firstname}, soy el ChatBot de la Oficina de Acceso a Alimentos de Boston. Usted complet\u00f3 una solicitud para el Fondo de Ayuda para el Alquiler y le dio permiso a la Ciudad de Boston para comunicarse con usted por mensaje de texto. \u00bfLe gustar\u00eda aprender acerca de los recursos alimenticios disponibles para usted? Responda SI o NO.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": -360, 
-                    "x": 3910
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitSpanish"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "sendIncomingSpanishWelcome", 
-            "properties": {
-                "body": "", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": -350, 
-                    "x": 2870
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value matches_any_of FOOD", 
-                            "arguments": [
-                                "{{trigger.message.Body}}"
-                            ], 
-                            "value": "FOOD, food"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendIncomingEnglishWelcome"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "If value matches_any_of COMIDA", 
-                            "arguments": [
-                                "{{trigger.message.Body}}"
-                            ], 
-                            "value": "COMIDA, comida"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "sendIncomingSpanishWelcome"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitFoodorComida", 
-            "properties": {
-                "body": "", 
-                "input": "{{trigger.message.Body}}", 
-                "offset": {
-                    "y": -660, 
-                    "x": 440
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "ENG", 
-                            "arguments": [
-                                "{{widgets.askEnglishLanguage.inbound.Body}}"
-                            ], 
-                            "value": "1, ENG, English"
-                        }
-                    ], 
-                    "event": "match", 
-                    "next": "askLearnAbout"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitAllLanguages", 
-            "properties": {
-                "body": "", 
-                "input": "{{widgets.askEnglishLanguage.inbound.Body}}", 
-                "offset": {
-                    "y": 540, 
-                    "x": 1530
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "sendIncomingSpanishWelcome"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "errorSpanish", 
-            "properties": {
-                "body": "", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": -60, 
-                    "x": 2400
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch", 
-                    "next": "errorSpanish"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to SI", 
-                            "arguments": [
-                                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
-                            ], 
-                            "value": "SI"
-                        }
-                    ], 
-                    "event": "match"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to NO", 
-                            "arguments": [
-                                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
-                            ], 
-                            "value": "NO, N"
-                        }
-                    ], 
-                    "event": "match"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "equal_to", 
-                            "friendly_name": "If value equal_to ALTO", 
-                            "arguments": [
-                                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
-                            ], 
-                            "value": "ALTO"
-                        }
-                    ], 
-                    "event": "match"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitSpanish", 
-            "properties": {
-                "body": "", 
-                "input": "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}", 
-                "offset": {
-                    "y": -70, 
-                    "x": 2890
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "noMatch"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "YES, Y", 
-                            "arguments": [
-                                "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}"
-                            ], 
-                            "value": "YES, Y"
-                        }
-                    ], 
-                    "event": "match"
-                }, 
-                {
-                    "conditions": [
-                        {
-                            "type": "matches_any_of", 
-                            "friendly_name": "NO", 
-                            "arguments": [
-                                "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}"
-                            ], 
-                            "value": "NO, N"
-                        }
-                    ], 
-                    "event": "match"
-                }
-            ], 
-            "type": "split-based-on", 
-            "name": "splitEnglishOutgoing", 
-            "properties": {
-                "body": "", 
-                "input": "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}", 
-                "offset": {
-                    "y": -60, 
-                    "x": 3920
-                }
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "incomingMessage", 
-                    "next": "splitSNAP"
-                }, 
-                {
-                    "event": "timeout"
-                }, 
-                {
-                    "event": "deliveryFailure"
-                }
-            ], 
-            "type": "send-and-wait-for-reply", 
-            "name": "sendSNAP", 
-            "properties": {
-                "body": "\u00bfLe gustar\u00eda aprender sobre el Programa de Incentivos Saludables (HIP)? Responda SI, NO o ALTO", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "timeout": "3600", 
-                "offset": {
-                    "y": 2230, 
-                    "x": -1720
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askLearnMore"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendSNAPEnroll", 
-            "properties": {
-                "body": "SNAP proporciona beneficios nutricionales para complementar el presupuesto de alimentos de las familias para que puedan comprar alimentos saludables.\n\u00bfLe gustar\u00eda obtener informaci\u00f3n sobre c\u00f3mo inscribirse en SNAP? Responda SI o NO.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 3010, 
-                    "x": -990
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
-        }, 
-        {
-            "transitions": [
-                {
-                    "event": "sent", 
-                    "next": "askLearnMore"
-                }, 
-                {
-                    "event": "failed"
-                }
-            ], 
-            "type": "send-message", 
-            "name": "sendSNAPNoEnroll", 
-            "properties": {
-                "body": "Puede enviar un mensaje de texto con \u201cFood\u201d al 74544 * para verificar su elegibilidad con mRelief, o llamar a Project Bread al 1-800-645-8333 para inscribirse o responder preguntas en 150 idiomas.\nPara obtener m\u00e1s informaci\u00f3n, visite https://www.mass.gov/snap-benefits-formerly-food-stamps.", 
-                "from": "{{flow.channel.address}}", 
-                "service": "{{trigger.message.InstanceSid}}", 
-                "to": "{{contact.channel.address}}", 
-                "offset": {
-                    "y": 3010, 
-                    "x": -640
-                }, 
-                "channel": "{{trigger.message.ChannelSid}}"
-            }
+          "next": "sendSpanishOutgoing",
+          "event": "incomingRequest"
         }
-    ], 
-    "initial_state": "Trigger", 
-    "flags": {
-        "allow_concurrent_calls": true
-    }, 
-    "description": "RRF OFA SMS"
+      ],
+      "properties": {
+        "offset": {
+          "x": 1110,
+          "y": -950
+        }
+      }
+    },
+    {
+      "name": "sendNoThanks",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 300,
+          "y": 570
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "No hay problema. ¡No me pondré en contacto con usted de nuevo! Puede enviar un mensaje de texto con la palabra \"COMIDA\" en cualquier momento si desea obtener información."
+      }
+    },
+    {
+      "name": "askSpanishLanguage",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "splitAllLanguages",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1030,
+          "y": 220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "¿En qué idioma preferiría recibir estos mensajes?\n\n0. Inglés \n1. Español (Latinoamericano)\n2. Chino Simplificado\n3. Criollo Haitiano\n4. Vietnamita\n5. Criollo Caboverdiano\n6. Portugés (Brasilieño)\n7. Ruso\n8. Arábico\n9. Francés\n10. Somalí",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "sendIncomingSpanishWelcome",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "splitSpanish",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -380,
+          "y": -370
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Hola, soy el ChatBot de la Oficina de Acceso a Alimentos de Boston. ¿Le gustaría continuar en español? Por favor responda SI o NO.",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "languageSpanish",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "askLearnAbout",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "Spanish",
+            "key": "language"
+          }
+        ],
+        "offset": {
+          "x": -490,
+          "y": 250
+        }
+      }
+    },
+    {
+      "name": "errorSpanish",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "sendIncomingSpanishWelcome",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -880,
+          "y": -90
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Lo sentimos, esa opción no es compatible actualmente. Inténtelo de nuevo."
+      }
+    },
+    {
+      "name": "askLearnAbout",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "getLearn",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -350,
+          "y": 1220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "¿Sobre qué tipo de recursos busca obtener más información?  \n\n1. Programas de beneficios \n2. Donde recoger comida \n3. Domicilios de comida o víveres de bajo costo  \n\nSolo puedo responder a una opción a la vez, pero podremos volver a estas opciones más adelante. Responda solo una opción 1, 2 o 3.",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "splitLearnAbout",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "errorLearnAbout",
+          "event": "noMatch"
+        },
+        {
+          "next": "askBenefit",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-1",
+              "arguments": [
+                "{{widgets.askLearnAbout.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "1, Programas de Beneficios, Programas, Beneficios , Benefit"
+            }
+          ]
+        },
+        {
+          "next": "askPickup",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-2",
+              "arguments": [
+                "{{widgets.askLearnAbout.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "2, Donde Recoger Comida, Recoger, Recoger Comida"
+            }
+          ]
+        },
+        {
+          "next": "sendDelivery",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-3",
+              "arguments": [
+                "{{widgets.askLearnAbout.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "3, Domicilios de Comida o Víveres de Bajo Costo, Domicilios"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.askLearnAbout.inbound.Body}}",
+        "offset": {
+          "x": -660,
+          "y": 1480
+        }
+      }
+    },
+    {
+      "name": "splitSpanish",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "errorSpanish",
+          "event": "noMatch"
+        },
+        {
+          "next": "languageSpanish",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-yes",
+              "arguments": [
+                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "SI, Y"
+            }
+          ]
+        },
+        {
+          "next": "askSpanishLanguage",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-no",
+              "arguments": [
+                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "No, N"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}",
+        "offset": {
+          "x": -380,
+          "y": -100
+        }
+      }
+    },
+    {
+      "name": "errorLearnAbout",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askLearnAbout",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1040,
+          "y": 1220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Lo sentimos, esa opción no es compatible actualmente. Inténtelo de nuevo."
+      }
+    },
+    {
+      "name": "askBenefit",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "getBenefit",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -710,
+          "y": 1720
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "¿Sobre cuál programa le gustaría obtener información?\n\nA. Programa de asistencia nutricional suplementaria (SNAP)\nB. Programa de nutrición para mujeres, bebés y niños (WIC)\nC. Programa de incentivos saludables (HIP)\nD. Tiendas Double Up Food Bucks\n\nSolo puedo responder a una opción a la vez, pero podremos volver a estas opciones más adelante. Responda solo una opción A, B, C, D, ATRAS o PARAR.",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "splitBenefit",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "errorBenefit",
+          "event": "noMatch"
+        },
+        {
+          "next": "sendSNAP",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-a",
+              "arguments": [
+                "{{widgets.askBenefit.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "next": "sendWIC",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-b",
+              "arguments": [
+                "{{widgets.askBenefit.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "B"
+            }
+          ]
+        },
+        {
+          "next": "sendHIP",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-c",
+              "arguments": [
+                "{{widgets.askBenefit.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "C"
+            }
+          ]
+        },
+        {
+          "next": "sendDoubleUp",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-d",
+              "arguments": [
+                "{{widgets.askBenefit.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "D"
+            }
+          ]
+        },
+        {
+          "next": "askLearnAbout",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-back",
+              "arguments": [
+                "{{widgets.askBenefit.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "ATRAS"
+            }
+          ]
+        },
+        {
+          "next": "sendNoThanks",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-stop",
+              "arguments": [
+                "{{widgets.askBenefit.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "PARAR"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.askBenefit.inbound.Body}}",
+        "offset": {
+          "x": -1180,
+          "y": 1970
+        }
+      }
+    },
+    {
+      "name": "askPickup",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "getPickup",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -320,
+          "y": 1760
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "¿Está buscando comprar comida asequible o gratuita? Puede recoger comida gratuita o asequible en varios lugares de la ciudad.\n \nA. Despensas de alimentos (GRATIS)\nB. Mercados de agricultores (SNAP + HIP)\nC. Sitios de comidas para jóvenes (GRATIS)\nD. Alimentos justos (bolsas de víveres de $2)\nE. Mercado de agricultores móviles ( SNAP + HIP)\nF. Tiendas de Boston Double Up Food Bucks (SNAP)\n\nSolo puedo responder a una opción a la vez, pero podremos volver a estas opciones más adelante. Responda solo una opción A, B, C, D, E, F, ATRAS, o PARAR.",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "splitPickup",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "errorPickup",
+          "event": "noMatch"
+        },
+        {
+          "next": "sendFoodPantry",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-a",
+              "arguments": [
+                "{{widgets.askPickup.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "A"
+            }
+          ]
+        },
+        {
+          "next": "sendFarmersMarket",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-b",
+              "arguments": [
+                "{{widgets.askPickup.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "B"
+            }
+          ]
+        },
+        {
+          "next": "sendYouthMeals",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-c",
+              "arguments": [
+                "{{widgets.askPickup.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "C"
+            }
+          ]
+        },
+        {
+          "next": "sendFairFoods",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-d",
+              "arguments": [
+                "{{widgets.askPickup.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "D"
+            }
+          ]
+        },
+        {
+          "next": "sendFreshTruck",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-e",
+              "arguments": [
+                "{{widgets.askPickup.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "E"
+            }
+          ]
+        },
+        {
+          "next": "sendDoubleUp",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-f",
+              "arguments": [
+                "{{widgets.askPickup.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "F"
+            }
+          ]
+        },
+        {
+          "next": "askLearnAbout",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-back",
+              "arguments": [
+                "{{widgets.askPickup.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "ATRAS"
+            }
+          ]
+        },
+        {
+          "next": "sendNoThanks",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-stop",
+              "arguments": [
+                "{{widgets.askPickup.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "PARAR"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.askPickup.inbound.Body}}",
+        "offset": {
+          "x": -200,
+          "y": 1970
+        }
+      }
+    },
+    {
+      "name": "sendDelivery",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askLearnMore",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 780,
+          "y": 1770
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Algunas de las opciones de entregas de alimentos asequibles en Boston son:\n\nFRIDAY FOOD MARKET: \nAhorre dinero en productos y ayude a reducir el desperdicio de alimentos comprando el exceso de productos de los distribuidores de alimentos de Boston. Reciba su producto al día siguiente mediante entrega. Por solo $2. Para realizar pedidos en línea, visite https://fridayfoodmarket.com/ \n\nDAILY TABLE: Productos con descuento y entregas gratuitas a lugares ubicados a 2 millas de sus tiendas. Use SNAP y Boston Double Up Food Bucks en sus ubicaciones. Para comprar en línea, visite https://dailytable.org/shop/ ."
+      }
+    },
+    {
+      "name": "askLearnMore",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "splitLearnMore",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1040,
+          "y": 3030
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "¿Puedo ayudarle con algo más? ¿Le gustaría obtener más información sobre otros recursos alimenticios? Responda SI o NO.",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "splitLearnMore",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "errorLearnMore",
+          "event": "noMatch"
+        },
+        {
+          "next": "askLearnAbout",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-yes",
+              "arguments": [
+                "{{widgets.askLearnMore.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "SI, Y"
+            }
+          ]
+        },
+        {
+          "next": "sendNoThanks",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-no",
+              "arguments": [
+                "{{widgets.askLearnMore.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "No, N"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.askLearnMore.inbound.Body}}",
+        "offset": {
+          "x": 820,
+          "y": 1210
+        }
+      }
+    },
+    {
+      "name": "sendHIP",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askSNAP",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1010,
+          "y": 2220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Todos los beneficiarios de SNAP pueden participar en HIP, sin necesidad de registrarse. Gaste sus dólares de SNAP en frutas y verduras frescas en mercados de agricultores participantes. ¡El valor de su compra será devuelto instantáneamente a su tarjeta EBT!\n\nEl beneficio dependerá del tamaño de su hogar. Un hogar de:\n1-2 personas puede recibir hasta $40 por mes. \n3-5 personas puede recibir hasta $60 por mes. \nPara más de 6 personas, puede recibir hasta $80 por mes. \n\nPara obtener más información, visite https://www.boston.gov/healthy-incentives/."
+      }
+    },
+    {
+      "name": "sendWIC",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askBenefit",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1360,
+          "y": 2220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "WIC es un programa de nutrición que brinda alimentos saludables, educación nutricional, apoyo para la lactancia materna, atención médica y otros servicios gratuitos para las familias que califican. Puede presentar una solicitud en línea en https://www.mass.gov/forms/apply-for-wic-online/ o llamar al 1-800-942-1007 y al 617-721-6601 de lunes a viernes de 9am a 5pm.\n\nSi desea obtener más información sobre el programa, visite https://www.mass.gov/wic-information-for-participants/."
+      }
+    },
+    {
+      "name": "sendDoubleUp",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askSNAP",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -680,
+          "y": 2220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Las tiendas Double Up Food Bucks ofrecen 50% de descuento en frutas y verduras a cualquier comprador de SNAP. Puede ahorrar hasta $ 10 por día. Puede encontrar una tienda cerca de usted en https://www.boston.gov/double-up/."
+      }
+    },
+    {
+      "name": "sendFoodPantry",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askPickup",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -350,
+          "y": 2220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Visite https://www.gbfb.org/need-food/ y busque por código postal. Llame a la despensa antes de ir para verificar el horario. "
+      }
+    },
+    {
+      "name": "sendFarmersMarket",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askHIP",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 0,
+          "y": 2220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Los mercados de agricultores son asequibles a través de programas de beneficios como SNAP y HIP. Visite https://www.boston.gov/farmers-markets/ para encontrar un mercado cerca de usted."
+      }
+    },
+    {
+      "name": "sendYouthMeals",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askPickup",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 340,
+          "y": 2220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Estos sitios ofrecen desayuno y almuerzo a niños y jóvenes menores de 18 años. No se requiere identificación para recoger una comida. Para buscar ubicaciones, visite https://www.boston.gov/boston-eats/. Llame al sitio antes de ir para verificar el horario"
+      }
+    },
+    {
+      "name": "askSNAP",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "splitSNAP2",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -910,
+          "y": 2530
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "¿Le gustaría obtener información sobre cómo inscribirse en SNAP? Responda SÍ o NO. ",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "splitSNAP2",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "errorSNAP",
+          "event": "noMatch"
+        },
+        {
+          "next": "sendSNAPEnroll",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-yes",
+              "arguments": [
+                "{{widgets.askSNAP.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "SI, Y"
+            }
+          ]
+        },
+        {
+          "next": "sendSNAPNoEnroll",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-no",
+              "arguments": [
+                "{{widgets.askSNAP.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "No, N"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.askSNAP.inbound.Body}}",
+        "offset": {
+          "x": -1000,
+          "y": 2760
+        }
+      }
+    },
+    {
+      "name": "askHIP",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "splitHIP",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 10,
+          "y": 2540
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "¿Le gustaría aprender sobre el Programa de Incentivos Saludables (HIP)? Responda SÍ, ATRAS o NO. ",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "splitHIP",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "errorHIP",
+          "event": "noMatch"
+        },
+        {
+          "next": "sendHIP",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-yes",
+              "arguments": [
+                "{{widgets.askHIP.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "SI, Y"
+            }
+          ]
+        },
+        {
+          "next": "askPickup",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-back",
+              "arguments": [
+                "{{widgets.askHIP.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "ATRAS"
+            }
+          ]
+        },
+        {
+          "next": "sendNoThanks",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-stop",
+              "arguments": [
+                "{{widgets.askHIP.inbound.Body}}"
+              ],
+              "type": "equal_to",
+              "value": "PARAR"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.askHIP.inbound.Body}}",
+        "offset": {
+          "x": -100,
+          "y": 2750
+        }
+      }
+    },
+    {
+      "name": "sendFairFoods",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askPickup",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 690,
+          "y": 2220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Los sitios de Fair Foods ofrecen bolsas de productos frescos por solo $ 2. Para buscar ubicaciones cerca de usted, visite https://www.bit.ly/fairfoods20/"
+      }
+    },
+    {
+      "name": "sendFreshTruck",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askHIP",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1040,
+          "y": 2220
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Fresh Truck es un mercado agrícola móvil. SNAP y HIP están disponibles en sus ubicaciones. Para ver su horario, visite https://www.aboutfresh.org/fresh-truck/#schedule/."
+      }
+    },
+    {
+      "name": "errorPickup",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askPickup",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 960,
+          "y": 1970
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Lo sentimos, esa opción no es compatible actualmente. Inténtelo de nuevo."
+      }
+    },
+    {
+      "name": "errorBenefit",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askBenefit",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1550,
+          "y": 1970
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Lo sentimos, esa opción no es compatible actualmente. Inténtelo de nuevo."
+      }
+    },
+    {
+      "name": "errorSNAP",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askSNAP",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1870,
+          "y": 2770
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Lo sentimos, esa opción no es compatible actualmente. Inténtelo de nuevo."
+      }
+    },
+    {
+      "name": "errorHIP",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askHIP",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -410,
+          "y": 2540
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Lo sentimos, esa opción no es compatible actualmente. Inténtelo de nuevo."
+      }
+    },
+    {
+      "name": "sendSpanishOutgoing",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "splitSpanishOutgoing",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 3910,
+          "y": -360
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "Hola {firstname}, soy el ChatBot de la Oficina de Acceso a Alimentos de Boston. Usted completó una solicitud para el Fondo de Ayuda para el Alquiler y le dio permiso a la Ciudad de Boston para comunicarse con usted por mensaje de texto. ¿Le gustaría aprender acerca de los recursos alimenticios disponibles para usted? Responda SI o NO.",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "splitFoodorComida",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-food",
+              "arguments": [
+                "{{trigger.message.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "FOOD"
+            }
+          ]
+        },
+        {
+          "next": "sendIncomingSpanishWelcome",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-comida",
+              "arguments": [
+                "{{trigger.message.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "COMIDA"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{trigger.message.Body}}",
+        "offset": {
+          "x": 120,
+          "y": -380
+        }
+      }
+    },
+    {
+      "name": "splitAllLanguages",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "next": "askLearnAbout",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-eng",
+              "arguments": [
+                "{{widgets.askSpanishLanguage.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "1, ENG, Spanish"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.askSpanishLanguage.inbound.Body}}",
+        "offset": {
+          "x": 1040,
+          "y": 530
+        }
+      }
+    },
+    {
+      "name": "splitSpanishOutgoing",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "event": "noMatch"
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "SI, Y",
+              "arguments": [
+                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "SI, Y"
+            }
+          ]
+        },
+        {
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "NO",
+              "arguments": [
+                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "NO, N"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}",
+        "offset": {
+          "x": 3920,
+          "y": -60
+        }
+      }
+    },
+    {
+      "name": "sendSNAP",
+      "type": "send-and-wait-for-reply",
+      "transitions": [
+        {
+          "next": "splitSNAP1",
+          "event": "incomingMessage"
+        },
+        {
+          "event": "timeout"
+        },
+        {
+          "event": "deliveryFailure"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1720,
+          "y": 2230
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "body": "SNAP proporciona beneficios nutricionales para complementar los presupuestos alimentarios de las familias para que puedan comprar alimentos saludables.\n\n¿Le gustaría obtener información sobre cómo inscribirse en SNAP? Responda SÍ o NO. ",
+        "timeout": "3600"
+      }
+    },
+    {
+      "name": "sendSNAPEnroll",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askLearnMore",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -990,
+          "y": 3010
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Puede enviar un mensaje de texto con la palabra \"FOOD\" al 74544 para verificar si es elegible o llamar a Project Bread al 1-800-645-8333 para recibir ayuda en 150 idiomas.\n\nPara aplicar en línea visite https://www.mass.gov/snap-benefits-formerly-food-stamps/ ."
+      }
+    },
+    {
+      "name": "sendSNAPNoEnroll",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "askLearnMore",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -560,
+          "y": 3010
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "No hay problema. Si tiene alguna otra pregunta sobre el programa, visite https://www.mass.gov/snap-benefits-formerly-food-stamps/ o llame a Project Bread al 1-800-645-8333. Pueden ayudarlo a responder sus preguntas en 150 idiomas."
+      }
+    },
+    {
+      "name": "splitSNAP1",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "errorSNAP",
+          "event": "noMatch"
+        },
+        {
+          "next": "sendSNAPEnroll",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-yes",
+              "arguments": [
+                "{{widgets.sendSNAP.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "SI, Y"
+            }
+          ]
+        },
+        {
+          "next": "sendSNAPNoEnroll",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "if-no",
+              "arguments": [
+                "{{widgets.sendSNAP.inbound.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "No, N"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{widgets.sendSNAP.inbound.Body}}",
+        "offset": {
+          "x": -1540,
+          "y": 2760
+        }
+      }
+    },
+    {
+      "name": "errorLearnMore",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "splitLearnMore",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 730,
+          "y": 1430
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "Lo sentimos, esa opción no es compatible actualmente. Inténtelo de nuevo."
+      }
+    },
+    {
+      "name": "getBenefit",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "splitBenefit",
+          "event": "success"
+        },
+        {
+          "next": "splitBenefit",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1500,
+          "y": 1540
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "body": "1, Programas de Beneficios, Programas, Beneficios ",
+        "parameters": [
+          {
+            "value": "{{widgets.askBenefit.inbound.Body}}",
+            "key": "benefitchoice"
+          },
+          {
+            "value": "{{widgets.askBenefit.inbound.From}}",
+            "key": "PhoneNumber"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/write-ofa"
+      }
+    },
+    {
+      "name": "getPickup",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "splitPickup",
+          "event": "success"
+        },
+        {
+          "next": "splitPickup",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 170,
+          "y": 1770
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "body": "2, Donde Recoger Comida, Recoger, Recoger Comida",
+        "parameters": [
+          {
+            "value": "{{widgets.askPickup.inbound.Body}}",
+            "key": "pickupchoice"
+          },
+          {
+            "value": "{{widgets.askPickup.inbound.From}}",
+            "key": "PhoneNumber"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/write-ofa"
+      }
+    },
+    {
+      "name": "getLearn",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "splitLearnAbout",
+          "event": "success"
+        },
+        {
+          "next": "splitLearnAbout",
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -160,
+          "y": 1420
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "body": "3, Domicilios de Comida o Víveres de Bajo Costo, Domicilios",
+        "parameters": [
+          {
+            "value": "{{widgets.askLearnAbout.inbound.Body}}",
+            "key": "learnchoice"
+          },
+          {
+            "value": "{{widgets.askLearnAbout.inbound.From}}",
+            "key": "PhoneNumber"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/write-ofa"
+      }
+    }
+  ],
+  "initial_state": "Trigger",
+  "flags": {
+    "allow_concurrent_calls": true
+  }
 }
