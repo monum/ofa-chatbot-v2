@@ -1,5 +1,5 @@
 # Office of Food Justice Chatbot v2
-Development of the next version of a chatbot for the Office of Food Access
+Development of version 2.0 of a chatbot for the Office of Food Justice
 
 ## Getting started with a chatbot
 1. The best place to start is almost always pen and paper. Make a simple diagram of how you expect your users to navigate the options.
