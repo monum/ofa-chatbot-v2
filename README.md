@@ -24,3 +24,11 @@ Development of the next version of a chatbot for the Office of Food Access
 <img width="603" alt="image" src="https://user-images.githubusercontent.com/87198109/201351370-bbe7ba70-ca9f-454b-a281-6a81fd8c59f5.png">
 7. You can now begin testing the newly purchased number by sending it any message. Unfortunately, this is not free, but you can use your trial balance!
 
+## Sending Bulk Messages with Google Sheets
+1.	To send outgoing messages in bulk we used this [Google tutorial](https://www.youtube.com/watch?v=O1cfIlQye8M). Check out our script [here](https://github.com/monum/ofa-chatbot-v2/blob/main/sendMessagesWithSheets.js). <img width="1007" alt="image" src="https://user-images.githubusercontent.com/87198109/201366544-2986a1a0-accf-46d6-b98e-4530b436b2ff.png">
+2.	To prepare an outgoing message, update the “Time Entered” with the date, “Phone Number”, “Name”, and “Language” fields.
+3.	In the “Message Body” field, copy the formula in our spreadsheet that is located on cell B24 in the Sheet ‘Instructions’. This formula selects the correct message depending on the referral source and creates the message with the name and language provided.
+=index(HelloTable,match(1,(D2 = Language)*(B2 = Referral),0),3)&C2&index(HelloTable,match(1,(D2 = Language)*(B2 = Referral),0),4)
+4.	Setup your translations in the Sheet named ‘Instructions’. 
+5.	Once you’re ready, send the messages by clicking ‘Send SMS > Send to All.’ The status column will update automatically.
+<img width="553" alt="image" src="https://user-images.githubusercontent.com/87198109/201367998-98e5e5fc-d671-4e17-81b5-c25dc1cde71e.png">
