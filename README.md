@@ -34,7 +34,7 @@ Development of the next version of a chatbot for the Office of Food Access
 
 ## Log Responses in Airtable
 1.  To log responses in Airtable you will need to use Twilio Functions -now named Functions (Classic). We used [this tutorial](https://www.youtube.com/watch?v=xjt9YhNFrno) to get us started. Our function is [here](https://github.com/monum/ofa-chatbot-v2/blob/main/logData.js).
-2.  To use the function in Twilio Studio you will need to add ‘Make HTTP Request’ widget.
+2.  To use the function in Twilio Studio you will need to add ‘Make HTTP Request’ widget or a ‘Run Function’ widget. Configuration is similar between both in this case.
 <img width="218" alt="image" src="https://user-images.githubusercontent.com/87198109/201380016-50e59572-7611-4367-9677-65badf381d96.png">
 
 3.  First give the widget a name and configure. 
@@ -49,6 +49,21 @@ Development of the next version of a chatbot for the Office of Food Access
 
  4. Test it out! Check if your Airtable is logging the data. 
 
+## Using Airtable as a database
+1.	To use Airtable as a database for our messages we used [this tutorial](https://www.twilio.com/blog/airtable-database-read). Our function is [here](https://github.com/monum/ofa-chatbot-v2/blob/main/readAirtableMessages.js).
+2.	To set up your function in Studio, add a ‘Run Function’ widget. 
+<img width="194" alt="image" src="https://user-images.githubusercontent.com/87198109/201384875-a591c097-d41e-49ee-a398-521ca64ba191.png">
 
+3.	Configure the widget. 
+    * Give the widget a name
+    * Select from the ‘Function URL’ drop-down menu the function you wish to use.
+    * Setup the function parameters. In our case:
+       * language: {{flow.variables.language}} – we are using a variable record which language users are contacting us in based on their initial interaction.
+<img width="209" alt="image" src="https://user-images.githubusercontent.com/87198109/201384923-bb4342b4-72ca-48ce-959a-04e1af3ee2dc.png">
 
+## Using variables in Twilio to read what users have texted
+1.	Add a ‘Variable’ widget and give it a name
+2.	Define the variable values using [Liquid Template Language](https://www.twilio.com/docs/studio/user-guide/liquid-template-language).
+3.	This is how we defined our language variable based on the key word we had assigned each language:
+{% assign text = trigger.message.Body | downcase | rstrip %} {%- case text -%} {%- when 'comida' or 'cancelar' -%} SPA {%- when 'food' or 'nothanks' or 'no thanks' -%} ENG {%- when 'manje' -%} HCR {%- when 'thức ăn' -%} VIE {%- when '食物' -%} CHI {%- when 'طعام' -%} ARA {%- when 'komida' -%} CVC {%- when 'alimento' -%} POR {%- when 'raashin' or 'maya mahadsanid' -%} SOM {%- endcase -%}
 
