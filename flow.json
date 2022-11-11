@@ -1,26 +1,26 @@
 {
-  "description": "ofa-chatbotv2-english",
+  "description": "OFA_Chatbot",
   "states": [
     {
       "name": "Trigger",
       "type": "trigger",
       "transitions": [
         {
-          "next": "splitFoodorComida",
+          "next": "setLanguage",
           "event": "incomingMessage"
         },
         {
           "event": "incomingCall"
         },
         {
-          "next": "sendEnglishOutgoing",
+          "next": "sendOutgoingMessage",
           "event": "incomingRequest"
         }
       ],
       "properties": {
         "offset": {
-          "x": 1110,
-          "y": -950
+          "x": 1070,
+          "y": -1470
         }
       }
     },
@@ -37,22 +37,22 @@
       ],
       "properties": {
         "offset": {
-          "x": 300,
-          "y": 570
+          "x": 1070,
+          "y": 3070
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "No problem. I won't contact you again! You can text the word 'FOOD' at any time if you would like to get information."
+        "body": "{{widgets.Messages.parsed.sendNoThanks}}"
       }
     },
     {
-      "name": "askEnglishLanguage",
+      "name": "askLanguage",
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "splitAllLanguages",
+          "next": "setLanguage2",
           "event": "incomingMessage"
         },
         {
@@ -70,16 +70,16 @@
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "What language would you prefer to receive these messages in?\n\n0. English\n1. Spanish (Latin American)\n2. Simplified Chinese\n3. Haitian Creole\n4. Vietnamese\n5. Cabo Verdean Creole \n6. Portuguese (Brazilian)\n7. Russian\n8. Arabic\n9. French\n10. Somali",
+        "body": "{{widgets.Messages.parsed.askLanguage}}",
         "timeout": "3600"
       }
     },
     {
-      "name": "sendIncomingEnglishWelcome",
+      "name": "sendWelcome",
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "splitEnglish",
+          "next": "splitWelcome",
           "event": "incomingMessage"
         },
         {
@@ -97,38 +97,16 @@
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "Hi there, I'm Boston's Office of Food Access ChatBot.  Would you like to continue in English? Please respond YES or NO.",
+        "body": "{{widgets.Messages.parsed.welcome}}",
         "timeout": "3600"
       }
     },
     {
-      "name": "languageEnglish",
-      "type": "set-variables",
-      "transitions": [
-        {
-          "next": "askLearnAbout",
-          "event": "next"
-        }
-      ],
-      "properties": {
-        "variables": [
-          {
-            "value": "English",
-            "key": "language"
-          }
-        ],
-        "offset": {
-          "x": -490,
-          "y": 250
-        }
-      }
-    },
-    {
-      "name": "errorEnglish",
+      "name": "errorOption",
       "type": "send-message",
       "transitions": [
         {
-          "next": "sendIncomingEnglishWelcome",
+          "next": "sendWelcome",
           "event": "sent"
         },
         {
@@ -144,7 +122,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Sorry, that option is not currently supported. Please try again."
+        "body": "{{widgets.Messages.parsed.errorOption}}"
       }
     },
     {
@@ -152,7 +130,7 @@
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "getLearn",
+          "next": "logLearn",
           "event": "incomingMessage"
         },
         {
@@ -164,13 +142,13 @@
       ],
       "properties": {
         "offset": {
-          "x": -350,
-          "y": 1220
+          "x": -600,
+          "y": 430
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "What type of resources are you looking to learn more about?\n\n1. Benefit Programs \n2. Where to Pick Up Food\n3. Get Food Delivered\n\nI can only respond to one option at a time, but we will be able to come back to these options later. Please respond with 1, 2 or 3.",
+        "body": "{{widgets.Messages.parsed.askLearnAbout}}",
         "timeout": "3600"
       }
     },
@@ -192,7 +170,7 @@
                 "{{widgets.askLearnAbout.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "1, Benefit Programs, Benefits, Benefit"
+              "value": "Benefit Programs, Benefits, 1, Programas de Beneficios, Programas, Beneficios, Pwogram Benefis, Benefis, Chương Trình Phúc Lợi, Phúc Lợi, 福利计划，福利,  برامج الإعانات، الإعانات, Programas di Benefissius, Benefissius, Programas de Beneficios, Beneficios, Brograamyada Manaafacaadka "
             }
           ]
         },
@@ -206,7 +184,7 @@
                 "{{widgets.askLearnAbout.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "2, Pickup, Pick Up, Where to Pick Up Food"
+              "value": "2, Pickup, Pick Up, Where to Pick Up Food, Donde Recoger Comida, Recoger, Recoger Comida, Pikòp, Pickup, Kikote pou vin chèche manje, Lấy, Lấy, Nơi Lấy Thực Phẩm, 取件，取件，取食物的地点, الحصول على، الاستلام، أين أحصل على الطعام, Buska, Pa Buska, Undé ki ta Buskadu Komida, Busca de Alimentos, Busca de Alimentos, Onde Buscar os Alimentos, Meesha Laga Qaato Raashinka"
             }
           ]
         },
@@ -220,7 +198,7 @@
                 "{{widgets.askLearnAbout.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "3, Food Delivery, Delivery, Get Food Delivered"
+              "value": "3, Food Delivery, Delivery, Get Food Delivered, 3, Domicilios de Comida, Domicilio de Víveres de Bajo Costo, Domicilios, Livrezon Manje, Livrezon, Jwenn Livrezon Manje, Giao Thực Phẩm, Giao, Nhận Giao Thực Phẩm, 食物配送，配送，让食物配送到府,  خدمة توصيل الطعام، توصيل، الحصول على خدمة توصيل الطعام, Entrega di Komida, Entrega, Pidi Entrega di Komida, Alimentos Entregues em casa, Entrega de Alimentos, Ter os Alimentos Entregues em casa, In Ley Keeno Raashin"
             }
           ]
         }
@@ -229,49 +207,49 @@
         "input": "{{widgets.askLearnAbout.inbound.Body}}",
         "offset": {
           "x": -660,
-          "y": 1480
+          "y": 1000
         }
       }
     },
     {
-      "name": "splitEnglish",
+      "name": "splitWelcome",
       "type": "split-based-on",
       "transitions": [
         {
-          "next": "errorEnglish",
+          "next": "errorOption",
           "event": "noMatch"
         },
         {
-          "next": "languageEnglish",
+          "next": "askLearnAbout",
           "event": "match",
           "conditions": [
             {
-              "friendly_name": "if-yes",
+              "friendly_name": "YES",
               "arguments": [
-                "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}"
+                "{{widgets.sendWelcome.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "Yes, Y"
+              "value": "SI, Sí, YES, Y, WI, W, CÓ, 是, نعم، نعم, SIN, SIM, S, HAA"
             }
           ]
         },
         {
-          "next": "askEnglishLanguage",
+          "next": "askLanguage",
           "event": "match",
           "conditions": [
             {
-              "friendly_name": "if-no",
+              "friendly_name": "NO",
               "arguments": [
-                "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}"
+                "{{widgets.sendWelcome.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "No, N"
+              "value": "No, N, NON, KHÔNG, 否, لا، لا, NAU, NÃO, MAYA"
             }
           ]
         }
       ],
       "properties": {
-        "input": "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}",
+        "input": "{{widgets.sendWelcome.inbound.Body}}",
         "offset": {
           "x": -380,
           "y": -100
@@ -292,14 +270,14 @@
       ],
       "properties": {
         "offset": {
-          "x": -1040,
-          "y": 1220
+          "x": -1210,
+          "y": 820
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Sorry, that option is not currently supported. Please try again."
+        "body": "{{widgets.Messages.parsed.errorLearnAbout}}"
       }
     },
     {
@@ -307,7 +285,7 @@
       "type": "send-and-wait-for-reply",
       "transitions": [
         {
-          "next": "getBenefit",
+          "next": "logBenefit",
           "event": "incomingMessage"
         },
         {
@@ -319,13 +297,13 @@
       ],
       "properties": {
         "offset": {
-          "x": -710,
-          "y": 1720
+          "x": -890,
+          "y": 1320
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "Which benefit program would you like to learn more about?\n\nA. Supplemental Nutrition Assistance Program (SNAP)\nB. Women, Infants, and Children Nutrition Program (WIC)\nC. Healthy Incentive Program (HIP)\nD. Double Up Food Bucks Stores\n\nI can only respond to one option at a time, but we will be able to come back to these options later. Please respond with A, B, C, D, GO BACK or END SESSION.",
+        "body": "{{widgets.Messages.parsed.askBenefit}}",
         "timeout": "3600"
       }
     },
@@ -403,7 +381,7 @@
                 "{{widgets.askBenefit.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "Go Back, Back"
+              "value": "ATRAS, GO BACK, BACK, FÈ BAK, QUAY LẠI, 返回, 回, الرجوع للخلف, VOLTA PA TRAZ, VOLTA, VOLTAR, GADAAL U NOQO"
             }
           ]
         },
@@ -417,7 +395,7 @@
                 "{{widgets.askBenefit.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "End Session, End"
+              "value": "END SESSION, END, PARAR, FÈMEN SESYON, FÈMEN, END SESSION, KẾT THÚC PHIÊN, END SESSION, END, 结束谈话, إنهاء الجلسة, FINDA SESSON, FINDA, ENCERRAR a SESSÃO, ENCERRAR, JOOJIN"
             }
           ]
         }
@@ -425,8 +403,8 @@
       "properties": {
         "input": "{{widgets.askBenefit.inbound.Body}}",
         "offset": {
-          "x": -1180,
-          "y": 1970
+          "x": -1170,
+          "y": 1890
         }
       }
     },
@@ -447,13 +425,13 @@
       ],
       "properties": {
         "offset": {
-          "x": -320,
-          "y": 1760
+          "x": -160,
+          "y": 1250
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "Are you looking to pick up affordable or free food? You can pick up free or affordable food at several locations throughout the City. \n\nA. Food Pantries (FREE)\nB. Farmers Markets (AFFORDABLE WITH SNAP + HIP)\nC. Youth Meal Sites (FREE)\nD. Fair Foods ($2 GROCERY BAGS)\nE. Mobile Farmers Market (AFFORDABLE WITH SNAP + HIP)\nF. Boston Double Up Food Bucks Stores (SNAP)\n\nRespond one of the following: A, B, C, D, E, F, GO BACK, or END SESSION.",
+        "body": "{{widgets.Messages.parsed.askPickup}}",
         "timeout": "3600"
       }
     },
@@ -559,7 +537,7 @@
                 "{{widgets.askPickup.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "Go Back, Back"
+              "value": "ATRAS, GO BACK, BACK, FÈ BAK, QUAY LẠI, 返回, 回, الرجوع للخلف, VOLTA PA TRAZ, VOLTA, VOLTAR, GADAAL U NOQO"
             }
           ]
         },
@@ -573,7 +551,7 @@
                 "{{widgets.askPickup.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "End Session, End"
+              "value": "END SESSION, END, PARAR, FÈMEN SESYON, FÈMEN, END SESSION, KẾT THÚC PHIÊN, END SESSION, END, 结束谈话, إنهاء الجلسة, FINDA SESSON, FINDA, ENCERRAR a SESSÃO, ENCERRAR, JOOJIN"
             }
           ]
         }
@@ -591,7 +569,7 @@
       "type": "send-message",
       "transitions": [
         {
-          "next": "askLearnMore",
+          "next": "delayAskLearnMore",
           "event": "sent"
         },
         {
@@ -600,14 +578,14 @@
       ],
       "properties": {
         "offset": {
-          "x": 780,
-          "y": 1770
+          "x": 710,
+          "y": 1750
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Are you looking for affordable food deliveries? Check out these options.\n\nFRIDAY FOOD MARKET: Save money on produce and help reduce food waste by shopping excess produce sourced from food distributors around Boston. Receive your produce the next day by delivery for only $2. To order online, visit https://fridayfoodmarket.com/ .\n\nDAILY TABLE: Discounted produce and free deliveries within 2 miles of their stores. Use SNAP and Boston Double Up Food Bucks at their locations. To shop online visit https://dailytable.org/shop/ ."
+        "body": "{{widgets.Messages.parsed.sendDelivery}}"
       }
     },
     {
@@ -627,13 +605,13 @@
       ],
       "properties": {
         "offset": {
-          "x": 1040,
-          "y": 3030
+          "x": 1830,
+          "y": 3910
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "Would you like to learn about other food resources? Please respond YES or NO.",
+        "body": "{{widgets.Messages.parsed.askLearnMore}}",
         "timeout": "3600"
       }
     },
@@ -655,7 +633,7 @@
                 "{{widgets.askLearnMore.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "Yes, Y"
+              "value": "SI, Sí, YES, Y, WI, W, CÓ, 是, نعم، نعم, SIN, SIM, S, HAA"
             }
           ]
         },
@@ -669,7 +647,7 @@
                 "{{widgets.askLearnMore.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "No, N"
+              "value": "No, N, NON, KHÔNG, 否, لا، لا, NAU, NÃO, MAYA"
             }
           ]
         }
@@ -677,8 +655,8 @@
       "properties": {
         "input": "{{widgets.askLearnMore.inbound.Body}}",
         "offset": {
-          "x": 820,
-          "y": 1210
+          "x": 1680,
+          "y": 1020
         }
       }
     },
@@ -703,7 +681,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "All SNAP beneficiaries can take part in HIP - no need to sign up. Spend your SNAP dollars on farm-fresh fruits and vegetables at participating retailers and have the amount of your purchase instantly added back to your EBT card!\n\nThe benefit will depend on the size of your household. \n\nFor 1-2 people you can earn up to $40 per month. \nFor 3-5 you can earn up to $60 per month. \nFor 6+ people you can earn up to $80 per month. \n\nFor more information, visit https://www.boston.gov/healthy-incentives/ ."
+        "body": "{{widgets.Messages.parsed.sendHIP}}"
       }
     },
     {
@@ -711,7 +689,7 @@
       "type": "send-message",
       "transitions": [
         {
-          "next": "askBenefit",
+          "next": "delayAskLearnMore",
           "event": "sent"
         },
         {
@@ -720,14 +698,14 @@
       ],
       "properties": {
         "offset": {
-          "x": -1360,
-          "y": 2220
+          "x": -1390,
+          "y": 2270
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "WIC is a nutrition program that provides healthy foods, nutrition education, breastfeeding support, and referrals to healthcare and other free services to families who qualify. You can apply online at https://www.mass.gov/forms/apply-for-wic-online/ or call at 1-800-942-1007 and 617-721-6601 weekdays Monday through Friday 9am – 5pm.\n\nIf you'd like to learn more about the program, visit https://www.mass.gov/wic-information-for-participants/ ."
+        "body": "{{widgets.Messages.parsed.sendWIC}}"
       }
     },
     {
@@ -751,7 +729,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Double Up Food Bucks Stores offer 50% discount on fruits and veggies to any SNAP shopper. You can save up to $10 each day. You can find a store near you at https://www.boston.gov/double-up/ ."
+        "body": "{{widgets.Messages.parsed.sendDoubleUp}}"
       }
     },
     {
@@ -759,7 +737,7 @@
       "type": "send-message",
       "transitions": [
         {
-          "next": "askPickup",
+          "next": "delayAskLearnMore",
           "event": "sent"
         },
         {
@@ -768,14 +746,14 @@
       ],
       "properties": {
         "offset": {
-          "x": -330,
+          "x": -350,
           "y": 2220
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Check out https://www.gbfb.org/need-food/ and search by zip code. Please call the pantry before you go to check for hours."
+        "body": "{{widgets.Messages.parsed.sendFoodPantry}}"
       }
     },
     {
@@ -799,7 +777,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Farmers Markets are now opening up and are affordable through benefit programs like SNAP and HIP. Visit https://www.boston.gov/farmers-markets/ to find a market near you."
+        "body": "{{widgets.Messages.parsed.sendFarmersMarket}}"
       }
     },
     {
@@ -807,7 +785,7 @@
       "type": "send-message",
       "transitions": [
         {
-          "next": "askPickup",
+          "next": "delayAskLearnMore",
           "event": "sent"
         },
         {
@@ -823,7 +801,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "These sites offer breakfast and lunch to children and youth who are 18 and under. No ID is required to pick up a meal. To search locations, visit https://www.boston.gov/boston-eats/ . Please call the site before you go to check for hours"
+        "body": "{{widgets.Messages.parsed.sendYouthMeals}}"
       }
     },
     {
@@ -849,7 +827,7 @@
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "Would you like to get information on how to enroll in SNAP? Please respond YES or NO.",
+        "body": "{{widgets.Messages.parsed.askSNAP}}",
         "timeout": "3600"
       }
     },
@@ -862,7 +840,7 @@
           "event": "noMatch"
         },
         {
-          "next": "sendSNAPEnroll",
+          "next": "getSNAPenroll",
           "event": "match",
           "conditions": [
             {
@@ -871,7 +849,7 @@
                 "{{widgets.askSNAP.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "Yes, Y"
+              "value": "YES, Y, SI, WI, W, YES, CÓ, Y, YES, HAA Y, 是, نعم، نعم, SIN, S, SIM, S, "
             }
           ]
         },
@@ -885,7 +863,7 @@
                 "{{widgets.askSNAP.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "No, N"
+              "value": "No, N, NON, KHÔNG, 否, لا، لا, NAU, MAYA, NÃO, "
             }
           ]
         }
@@ -893,8 +871,8 @@
       "properties": {
         "input": "{{widgets.askSNAP.inbound.Body}}",
         "offset": {
-          "x": -1000,
-          "y": 2760
+          "x": -1160,
+          "y": 2750
         }
       }
     },
@@ -921,7 +899,7 @@
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "Would you like to learn about the Healthy Incentives Program (HIP)?  Please respond YES, GO BACK, or END SESSION.",
+        "body": "{{widgets.Messages.parsed.askHIP}}",
         "timeout": "3600"
       }
     },
@@ -943,7 +921,7 @@
                 "{{widgets.askHIP.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "Yes, Y"
+              "value": "YES, Y, SI, WI, W, YES, CÓ, Y, YES, Y, 是, نعم، نعم, SIN, S, SIM, S, HAA"
             }
           ]
         },
@@ -957,7 +935,7 @@
                 "{{widgets.askHIP.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "Go Back, Back"
+              "value": "ATRAS, GO BACK, BACK, FÈ BAK, QUAY LẠI, 返回, 回, الرجوع للخلف, VOLTA PA TRAZ, VOLTA, VOLTAR, GADAAL U NOQO "
             }
           ]
         },
@@ -971,7 +949,7 @@
                 "{{widgets.askHIP.inbound.Body}}"
               ],
               "type": "equal_to",
-              "value": "End Session, End"
+              "value": "END SESSION, END, PARAR, FÈMEN SESYON, FÈMEN, END SESSION, KẾT THÚC PHIÊN, END SESSION, END, 结束谈话, إنهاء الجلسة, FINDA SESSON, FINDA, ENCERRAR a SESSÃO, ENCERRAR, JOOJIN"
             }
           ]
         }
@@ -989,7 +967,7 @@
       "type": "send-message",
       "transitions": [
         {
-          "next": "askPickup",
+          "next": "delayAskLearnMore",
           "event": "sent"
         },
         {
@@ -1005,7 +983,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Fair Foods sites offer bags of fresh produce for only $2. To search for locations near you visit https://www.bit.ly/fairfoods20/ ."
+        "body": "{{widgets.Messages.parsed.sendFairFoods}}"
       }
     },
     {
@@ -1029,7 +1007,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "The Fresh Truck is a mobile farmers market. SNAP and HIP are available at their locations. To see their schedule visit https://www.aboutfresh.org/fresh-truck/#schedule/ ."
+        "body": "{{widgets.Messages.parsed.sendFreshTruck}}"
       }
     },
     {
@@ -1053,7 +1031,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Sorry, that option is not currently supported. Please try again."
+        "body": "{{widgets.Messages.parsed.errorPickup}}"
       }
     },
     {
@@ -1070,14 +1048,14 @@
       ],
       "properties": {
         "offset": {
-          "x": -1550,
-          "y": 1970
+          "x": -1530,
+          "y": 1640
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Sorry, that option is not currently supported. Please try again."
+        "body": "{{widgets.Messages.parsed.errorBenefit}}"
       }
     },
     {
@@ -1094,14 +1072,14 @@
       ],
       "properties": {
         "offset": {
-          "x": -1870,
-          "y": 2770
+          "x": -2030,
+          "y": 2940
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Sorry, that option is not currently supported. Please try again."
+        "body": "{{widgets.Messages.parsed.errorSNAP}}"
       }
     },
     {
@@ -1125,257 +1103,7 @@
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Sorry, that option is not currently supported. Please try again."
-      }
-    },
-    {
-      "name": "sendEnglishOutgoing",
-      "type": "send-and-wait-for-reply",
-      "transitions": [
-        {
-          "next": "splitEnglishOutgoing",
-          "event": "incomingMessage"
-        },
-        {
-          "event": "timeout"
-        },
-        {
-          "event": "deliveryFailure"
-        }
-      ],
-      "properties": {
-        "offset": {
-          "x": 3910,
-          "y": -360
-        },
-        "service": "{{trigger.message.InstanceSid}}",
-        "channel": "{{trigger.message.ChannelSid}}",
-        "from": "{{flow.channel.address}}",
-        "body": "Hi there, I'm Boston's Office of Food Access ChatBot. You completed an application for the Rental Relief Fund and gave the City of Boston permission to contact you via text. Would you like to learn about food resources available to you? Please respond YES or NO.",
-        "timeout": "3600"
-      }
-    },
-    {
-      "name": "sendIncomingSpanishWelcome",
-      "type": "send-and-wait-for-reply",
-      "transitions": [
-        {
-          "next": "splitSpanish",
-          "event": "incomingMessage"
-        },
-        {
-          "event": "timeout"
-        },
-        {
-          "event": "deliveryFailure"
-        }
-      ],
-      "properties": {
-        "offset": {
-          "x": 2870,
-          "y": -350
-        },
-        "service": "{{trigger.message.InstanceSid}}",
-        "channel": "{{trigger.message.ChannelSid}}",
-        "from": "{{flow.channel.address}}",
-        "body": "Hola, soy el ChatBot de la Oficina de Acceso a Alimentos de Boston. Le gustaría continuar en español. Por favor responda SI, NO o ALTO.",
-        "timeout": "3600"
-      }
-    },
-    {
-      "name": "splitFoodorComida",
-      "type": "split-based-on",
-      "transitions": [
-        {
-          "event": "noMatch"
-        },
-        {
-          "next": "sendIncomingEnglishWelcome",
-          "event": "match",
-          "conditions": [
-            {
-              "friendly_name": "if-food",
-              "arguments": [
-                "{{trigger.message.Body}}"
-              ],
-              "type": "matches_any_of",
-              "value": "FOOD"
-            }
-          ]
-        },
-        {
-          "next": "sendIncomingSpanishWelcome",
-          "event": "match",
-          "conditions": [
-            {
-              "friendly_name": "if-comida",
-              "arguments": [
-                "{{trigger.message.Body}}"
-              ],
-              "type": "matches_any_of",
-              "value": "COMIDA"
-            }
-          ]
-        }
-      ],
-      "properties": {
-        "input": "{{trigger.message.Body}}",
-        "offset": {
-          "x": 120,
-          "y": -380
-        }
-      }
-    },
-    {
-      "name": "splitAllLanguages",
-      "type": "split-based-on",
-      "transitions": [
-        {
-          "event": "noMatch"
-        },
-        {
-          "next": "askLearnAbout",
-          "event": "match",
-          "conditions": [
-            {
-              "friendly_name": "if-eng",
-              "arguments": [
-                "{{widgets.askEnglishLanguage.inbound.Body}}"
-              ],
-              "type": "matches_any_of",
-              "value": "1, ENG, English"
-            }
-          ]
-        }
-      ],
-      "properties": {
-        "input": "{{widgets.askEnglishLanguage.inbound.Body}}",
-        "offset": {
-          "x": 1040,
-          "y": 530
-        }
-      }
-    },
-    {
-      "name": "errorSpanish",
-      "type": "send-message",
-      "transitions": [
-        {
-          "next": "sendIncomingSpanishWelcome",
-          "event": "sent"
-        },
-        {
-          "event": "failed"
-        }
-      ],
-      "properties": {
-        "offset": {
-          "x": 2400,
-          "y": -60
-        },
-        "service": "{{trigger.message.InstanceSid}}",
-        "channel": "{{trigger.message.ChannelSid}}",
-        "from": "{{flow.channel.address}}",
-        "to": "{{contact.channel.address}}",
-        "body": "Lo sentimos, esa opción no es compatible actualmente. Inténtelo de nuevo."
-      }
-    },
-    {
-      "name": "splitSpanish",
-      "type": "split-based-on",
-      "transitions": [
-        {
-          "next": "errorSpanish",
-          "event": "noMatch"
-        },
-        {
-          "event": "match",
-          "conditions": [
-            {
-              "friendly_name": "if-yes",
-              "arguments": [
-                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
-              ],
-              "type": "equal_to",
-              "value": "SI"
-            }
-          ]
-        },
-        {
-          "event": "match",
-          "conditions": [
-            {
-              "friendly_name": "if-no",
-              "arguments": [
-                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
-              ],
-              "type": "equal_to",
-              "value": "NO, N"
-            }
-          ]
-        },
-        {
-          "event": "match",
-          "conditions": [
-            {
-              "friendly_name": "if-stop",
-              "arguments": [
-                "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}"
-              ],
-              "type": "equal_to",
-              "value": "ALTO"
-            }
-          ]
-        }
-      ],
-      "properties": {
-        "input": "{{widgets.sendIncomingSpanishWelcome.inbound.Body}}",
-        "offset": {
-          "x": 2890,
-          "y": -70
-        }
-      }
-    },
-    {
-      "name": "splitEnglishOutgoing",
-      "type": "split-based-on",
-      "transitions": [
-        {
-          "event": "noMatch"
-        },
-        {
-          "event": "match",
-          "conditions": [
-            {
-              "friendly_name": "YES, Y",
-              "arguments": [
-                "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}"
-              ],
-              "type": "matches_any_of",
-              "value": "YES, Y"
-            }
-          ]
-        },
-        {
-          "event": "match",
-          "conditions": [
-            {
-              "friendly_name": "NO",
-              "arguments": [
-                "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}"
-              ],
-              "type": "matches_any_of",
-              "value": "NO, N"
-            }
-          ]
-        }
-      ],
-      "properties": {
-        "input": "{{widgets.sendIncomingEnglishWelcome.inbound.Body}}",
-        "offset": {
-          "x": 3920,
-          "y": -60
-        }
+        "body": "{{widgets.Messages.parsed.errorHIP}}"
       }
     },
     {
@@ -1401,7 +1129,7 @@
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
-        "body": "SNAP provides nutrition benefits to supplement the food budgets of families so they can purchase healthy food.  \n\nWould you like to get information on how to enroll on SNAP? Please respond YES or NO.",
+        "body": "{{widgets.Messages.parsed.sendSNAP}}",
         "timeout": "3600"
       }
     },
@@ -1410,7 +1138,7 @@
       "type": "send-message",
       "transitions": [
         {
-          "next": "askLearnMore",
+          "next": "delayAskLearnMore",
           "event": "sent"
         },
         {
@@ -1419,38 +1147,14 @@
       ],
       "properties": {
         "offset": {
-          "x": -990,
-          "y": 3010
+          "x": -1350,
+          "y": 3380
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "You can text \"FOOD\" to 74544 to check your eligibility with mRelief, or call Project Bread at 1-800-645-8333 for support in 150 languages.\n\nTo apply online visit: https://www.mass.gov/how-to/apply-for-snap-benefits-food-stamps"
-      }
-    },
-    {
-      "name": "sendSNAPNoEnroll",
-      "type": "send-message",
-      "transitions": [
-        {
-          "next": "askLearnMore",
-          "event": "sent"
-        },
-        {
-          "event": "failed"
-        }
-      ],
-      "properties": {
-        "offset": {
-          "x": -560,
-          "y": 3010
-        },
-        "service": "{{trigger.message.InstanceSid}}",
-        "channel": "{{trigger.message.ChannelSid}}",
-        "from": "{{flow.channel.address}}",
-        "to": "{{contact.channel.address}}",
-        "body": "No problem. If you have any other questions about the program, visit https://www.mass.gov/snap-benefits-formerly-food-stamps/ or call Project Bread at 1-800-645-8333. They can help you answer questions in 150 languages."
+        "body": "{{widgets.Messages.parsed.sendSNAPEnroll}}"
       }
     },
     {
@@ -1462,7 +1166,7 @@
           "event": "noMatch"
         },
         {
-          "next": "sendSNAPEnroll",
+          "next": "getSNAPenroll",
           "event": "match",
           "conditions": [
             {
@@ -1471,7 +1175,7 @@
                 "{{widgets.sendSNAP.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "Yes, Y"
+              "value": "YES, Y, S, SI, SÍ, WI, W, YES, CÓ, Y, YES, Y, 是, نعم، نعم, SIN, S, SIM, S, HAA"
             }
           ]
         },
@@ -1485,7 +1189,7 @@
                 "{{widgets.sendSNAP.inbound.Body}}"
               ],
               "type": "matches_any_of",
-              "value": "No, N"
+              "value": "No, N, NON, KHÔNG, 否, لا، لا, NAU, NÃO, MAYA"
             }
           ]
         }
@@ -1493,8 +1197,8 @@
       "properties": {
         "input": "{{widgets.sendSNAP.inbound.Body}}",
         "offset": {
-          "x": -1540,
-          "y": 2760
+          "x": -1770,
+          "y": 2490
         }
       }
     },
@@ -1503,7 +1207,7 @@
       "type": "send-message",
       "transitions": [
         {
-          "next": "splitLearnMore",
+          "next": "delayAskLearnMore",
           "event": "sent"
         },
         {
@@ -1512,18 +1216,18 @@
       ],
       "properties": {
         "offset": {
-          "x": 1440,
-          "y": 1210
+          "x": 1530,
+          "y": 1520
         },
         "service": "{{trigger.message.InstanceSid}}",
         "channel": "{{trigger.message.ChannelSid}}",
         "from": "{{flow.channel.address}}",
         "to": "{{contact.channel.address}}",
-        "body": "Sorry, that option is not currently supported. Please try again."
+        "body": "{{widgets.Messages.parsed.errorLearnMore}}"
       }
     },
     {
-      "name": "getBenefit",
+      "name": "logBenefit",
       "type": "make-http-request",
       "transitions": [
         {
@@ -1537,11 +1241,12 @@
       ],
       "properties": {
         "offset": {
-          "x": -1500,
-          "y": 1540
+          "x": -1010,
+          "y": 1620
         },
         "method": "POST",
         "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "body": "1, Programas de Beneficios, Programas, Beneficios ",
         "parameters": [
           {
             "value": "{{widgets.askBenefit.inbound.Body}}",
@@ -1570,11 +1275,12 @@
       ],
       "properties": {
         "offset": {
-          "x": 170,
-          "y": 1770
+          "x": -590,
+          "y": 1640
         },
         "method": "POST",
         "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "body": "2, Donde Recoger Comida, Recoger, Recoger Comida",
         "parameters": [
           {
             "value": "{{widgets.askPickup.inbound.Body}}",
@@ -1589,7 +1295,7 @@
       }
     },
     {
-      "name": "getLearn",
+      "name": "logLearn",
       "type": "make-http-request",
       "transitions": [
         {
@@ -1603,8 +1309,8 @@
       ],
       "properties": {
         "offset": {
-          "x": -160,
-          "y": 1420
+          "x": -610,
+          "y": 720
         },
         "method": "POST",
         "content_type": "application/x-www-form-urlencoded;charset=utf-8",
@@ -1622,22 +1328,271 @@
       }
     },
     {
-      "name": "split_1",
-      "type": "split-based-on",
+      "name": "setLanguage",
+      "type": "set-variables",
       "transitions": [
         {
-          "event": "noMatch"
+          "next": "logInitialMessage",
+          "event": "next"
         }
       ],
       "properties": {
+        "variables": [
+          {
+            "value": "{% assign text = trigger.message.Body | downcase | rstrip %}\n{%-  case text  -%}\n{%- when 'comida' or 'cancelar' -%}\nSPA\n{%- when 'food' or 'nothanks' or 'no thanks' -%}\nENG\n{%- when 'manje' -%}\nHCR\n{%- when 'thức ăn' -%}\nVIE\n{%- when '食物' -%}\nCHI\n{%- when 'طعام' -%}\nARA\n{%- when 'komida' -%}\nCVC\n{%- when 'alimento' -%}\nPOR\n{%- when 'raashin' or 'maya mahadsanid' -%}\nSOM\n{%- endcase -%}",
+            "key": "language"
+          }
+        ],
         "offset": {
-          "x": 10,
-          "y": -1190
+          "x": 500,
+          "y": -1310
         }
       }
     },
     {
-      "name": "http_1",
+      "name": "Messages",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "cancelCheck",
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 200,
+          "y": -830
+        },
+        "parameters": [
+          {
+            "value": "{{flow.variables.language}}",
+            "key": "language"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/messages"
+      }
+    },
+    {
+      "name": "setLanguage2",
+      "type": "set-variables",
+      "transitions": [
+        {
+          "next": "Messages",
+          "event": "next"
+        }
+      ],
+      "properties": {
+        "variables": [
+          {
+            "value": "{% assign text = widgets.askLanguage.inbound.Body | downcase | rstrip %}\n{%-  case text  -%}\n{%- when '1'  or 'spa' or 'esp' or 'spanish' or 'español' or 'espanhol' or 'spanhol' or 'الإسبانية' or '西班牙语' or 'tiếng tây ban nha' or 'panyòl' or 'espanol' or 'isbanish'-%}\nSPA\n{%- when '0' or 'eng' or 'english' or 'inglés' or 'ingles' or 'anglè' or 'tiếng anh' or '英语' or 'الإنكليزية' or 'inglês' or 'ingiriisi'-%}\nENG\n{%- when '2' or 'simplified chinese' or 'chinese' or 'chi' or 'chino' or 'chino simplificado' or 'chinwa' or 'chinwa senplifye' or 'tiếng trung giản thể' or '简体中文' or 'الصينية المبسّطة' or 'xines sinplifikadu' or 'chinês' or 'shiinaha la fududeyay'-%}\nCHI\n{%- when '3' or 'haitian creole' or 'criollo haitiano' or 'haitiano' or 'kreyòl ayisyen' or 'tiếng creole haiti' or '海地克里奥尔语' or 'كريول هايتي' or 'kriolu di haiti' or 'haitian creole'-%}\nHCR\n{%- when '4' or 'vietnamese' or 'viet' or 'vietnamita' or 'vyetnamyen' or 'tiếng việt' or  '越南语' or 'الفيتنامية' or 'fietnamees'-%}\nVIE\n{%- when '5' or 'cabo verdean creole' or 'cape verdean creole' or 'cape verdean' or 'cabo verdean' or 'caboverdeano' or  'criollo caboverdeano' or 'kreyòl kap vè' or 'tiếng creole cabo verde' or '佛得角克里奥尔语' or 'كريول الرأس الأخض' or 'kriolu di cabu verdi' or 'kriolu' or 'cabo verdiano' or 'cabo-verdiano' or 'criolu' or 'cabo verdean creole'-%}\nCVC\n{%- when '6' or 'portuguese' or 'por' or 'port' or 'portugues' or 'portugués' or 'pòtigè' or 'tiếng bồ đào nha' or '葡萄牙语' or 'البرتغالية' or 'português' or 'bortuqiis'-%}\nPOR\n{%- when '7' or 'arab' or 'arabic' or 'ara' or 'árabe' or 'arabe' or 'tiếng ả rập' or '阿拉伯语' or 'العربية' or 'arabi' or 'carabi'-%}\nARA\n{%- endcase -%}",
+            "key": "language"
+          }
+        ],
+        "offset": {
+          "x": 1090,
+          "y": 530
+        }
+      }
+    },
+    {
+      "name": "sendOutgoingMessage",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "logReferralContacted",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1550,
+          "y": -1310
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{flow.data.to}}",
+        "body": "{{flow.data.message}}"
+      }
+    },
+    {
+      "name": "cancelCheck",
+      "type": "split-based-on",
+      "transitions": [
+        {
+          "next": "sendWelcome",
+          "event": "noMatch"
+        },
+        {
+          "next": "sendNoThanks2",
+          "event": "match",
+          "conditions": [
+            {
+              "friendly_name": "CANCEL",
+              "arguments": [
+                "{{trigger.message.Body}}"
+              ],
+              "type": "matches_any_of",
+              "value": "no thanks, NO THANKS, NOTHANKS, nothanks, cancelar, Cancelar, CANCELAR, HỦY, hủy, 取消, ANILE, anile, إلغاء, KANSELA, kansela, maya mahadsanid, MAYA MAHADSANID"
+            }
+          ]
+        }
+      ],
+      "properties": {
+        "input": "{{trigger.message.Body}}",
+        "offset": {
+          "x": -100,
+          "y": -600
+        }
+      }
+    },
+    {
+      "name": "sendNoThanks2",
+      "type": "send-message",
+      "transitions": [
+        {
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 190,
+          "y": -310
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "{{widgets.Messages.parsed.sendNoThanks}}"
+      }
+    },
+    {
+      "name": "getSNAPenroll",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "sendSNAPEnroll",
+          "event": "success"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -1280,
+          "y": 3130
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "parameters": [
+          {
+            "value": "{{widgets.askSNAP.inbound.Body}} {{widgets.askSNAP.inbound.Body}} {{widgets.askSNAP.inbound.Body}}",
+            "key": "enrollSNAP"
+          },
+          {
+            "value": "{{widgets.askBenefit.inbound.From}}",
+            "key": "PhoneNumber"
+          },
+          {
+            "value": "{{widgets.sendSNAP.inbound.Body}}",
+            "key": "enrollSNAP"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/write-ofa"
+      }
+    },
+    {
+      "name": "delayAskLearnMore",
+      "type": "run-function",
+      "transitions": [
+        {
+          "next": "askLearnMore",
+          "event": "success"
+        },
+        {
+          "event": "fail"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 1460,
+          "y": 3680
+        },
+        "url": "https://mantis-cuscus-7403.twil.io/delay"
+      }
+    },
+    {
+      "name": "sendSNAPNoEnroll",
+      "type": "send-message",
+      "transitions": [
+        {
+          "next": "delayAskLearnMore",
+          "event": "sent"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": -710,
+          "y": 3270
+        },
+        "service": "{{trigger.message.InstanceSid}}",
+        "channel": "{{trigger.message.ChannelSid}}",
+        "from": "{{flow.channel.address}}",
+        "to": "{{contact.channel.address}}",
+        "body": "{{widgets.Messages.parsed.sendSNAPNoEnroll}}"
+      }
+    },
+    {
+      "name": "logInitialMessage",
+      "type": "make-http-request",
+      "transitions": [
+        {
+          "next": "Messages",
+          "event": "success"
+        },
+        {
+          "event": "failed"
+        }
+      ],
+      "properties": {
+        "offset": {
+          "x": 240,
+          "y": -1090
+        },
+        "method": "POST",
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "parameters": [
+          {
+            "value": "{{trigger.message.Body}}",
+            "key": "triggerMessage"
+          },
+          {
+            "value": "{{trigger.message.From}}",
+            "key": "PhoneNumber"
+          },
+          {
+            "value": "{{flow.variables.language}}",
+            "key": "language"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/write-ofa"
+      }
+    },
+    {
+      "name": "logReferralContacted",
       "type": "make-http-request",
       "transitions": [
         {
@@ -1649,11 +1604,26 @@
       ],
       "properties": {
         "offset": {
-          "x": -78,
-          "y": -984
+          "x": 1560,
+          "y": -1070
         },
         "method": "POST",
-        "content_type": "application/x-www-form-urlencoded;charset=utf-8"
+        "content_type": "application/x-www-form-urlencoded;charset=utf-8",
+        "parameters": [
+          {
+            "value": "{{flow.data.referral}}",
+            "key": "referral"
+          },
+          {
+            "value": "{{flow.data.to}}",
+            "key": "PhoneNumber"
+          },
+          {
+            "value": "{{flow.data.language}}",
+            "key": "languageReferral"
+          }
+        ],
+        "url": "https://mantis-cuscus-7403.twil.io/write-ofa"
       }
     }
   ],
