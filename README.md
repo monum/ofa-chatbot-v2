@@ -9,13 +9,18 @@ Development of the next version of a chatbot for the Office of Food Access
 
 1. Create a Twilio account, if your department or organization already has an ‘Organization’ created ask to be added. For the City of Boston, ask to be added to the MONUM organization to access OFJ’s chatbot.
 
-1. To create a new flow or edit one, on the left-hand side navigation tab click on ‘Studio’ and then ‘[Flows](https://www.twilio.com/console/studio/flows)’. If this option is not available, click on ‘Explore Products’ and under Developer tools find ‘Studio’ and click the pin so it will be available next time. <img width="181" alt="image" src="https://user-images.githubusercontent.com/87198109/201346525-80e3c820-2f63-4d42-95da-5e7cd122db0c.png">
- 
-1. To create a new flow, follow [these steps](https://www.twilio.com/docs/studio/tutorials/how-to-build-a-chatbot). To check out the flow we designed take look at our JSON [here]. 
+1. To create a new flow or edit one, on the left-hand side navigation tab click on ‘Studio’ and then ‘[Flows](https://www.twilio.com/console/studio/flows)’. If this option is not available, click on ‘Explore Products’ and under Developer tools find ‘Studio’ and click the pin so it will be available next time. 
+<img width="181" alt="image" src="https://user-images.githubusercontent.com/87198109/201346525-80e3c820-2f63-4d42-95da-5e7cd122db0c.png">
+
+3. To create a new flow, follow [these steps](https://www.twilio.com/docs/studio/tutorials/how-to-build-a-chatbot). To check out the flow we designed take look at our JSON [here](https://github.com/monum/ofa-chatbot-v2/blob/main/flow.json). 
 1. Once you have a flow designed, it is time to buy a phone number. Click ‘Phone numbers’ (in the left-hand side navigation bar) and under it ‘Manage’ and ‘Buy a number’. If the option ‘Phone numbers’ is not visible click on ‘Explore Products’ and look for the option and click the pin. 
-1. Once that’s done, click on the phone number in ‘Active Numbers’. It should say Configure and Properties. Scroll all the way down to 'Messaging Services' and set it as follows:
-   * A Message Comes In > Studio Flow >[Your flow name]
-1. To receive messages from the chatbot, go to Phone Numbers > Manage > Verified Caller IDs. When testing, every number must go through this process. Click the red plus (+) button to add a new number, then click “text you instead” to input a code. When this is done correctly, your number will show on the list of verified caller IDs.
- 
-1. You can now begin testing the newly purchased number by sending it any message. Unfortunately, this is not free, but you can use your trial balance!
+1. Once that’s done, click on the phone number in ‘Active Numbers’. It should say Configure and Properties. Scroll all the way down to 'Messaging' and set it as follows:
+   * Under ‘Messaging Service’ select the name of your flow.
+   * Just below you should also find the option ‘A Message Comes In’ and set the options to Studio Flow and [name of your flow]. In our case it was OFA_Chatbot. 
+   <img width="1014" alt="image" src="https://user-images.githubusercontent.com/87198109/201350034-462fc285-a299-482a-9454-757da5e6d5d9.png">
+1. For testing purposes, you need add your phone as verified phone numbers. 
+   * Go to Phone Numbers > Manage > Verified Caller IDs.
+   * •	Click ‘Add a new Caller ID’ to add a new number. Input your number and choose the verification you prefer, SMS or Call. Once verified your number will show on the list of verified caller IDs.
+<img width="603" alt="image" src="https://user-images.githubusercontent.com/87198109/201351370-bbe7ba70-ca9f-454b-a281-6a81fd8c59f5.png">
+7. You can now begin testing the newly purchased number by sending it any message. Unfortunately, this is not free, but you can use your trial balance!
 
