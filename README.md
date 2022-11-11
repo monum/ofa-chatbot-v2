@@ -32,3 +32,22 @@ Development of the next version of a chatbot for the Office of Food Access
 4.	Setup your translations in the Sheet named ‘Instructions’. 
 5.	Once you’re ready, send the messages by clicking ‘Send SMS > Send to All.’ The status column will update automatically.
 <img width="553" alt="image" src="https://user-images.githubusercontent.com/87198109/201367998-98e5e5fc-d671-4e17-81b5-c25dc1cde71e.png">
+
+## Log Responses in Airtable
+1.  To log responses in Airtable you will need to use Twilio Functions -now named Functions (Classic). We used [this tutorial](https://www.youtube.com/watch?v=xjt9YhNFrno) to get us started. Our function is [here](https://github.com/monum/ofa-chatbot-v2/blob/main/logData.js).
+2.  To use the function in Twilio Studio you will need to add ‘Make HTTP Request’ widget.
+<img width="218" alt="image" src="https://user-images.githubusercontent.com/87198109/201380016-50e59572-7611-4367-9677-65badf381d96.png">
+
+3.  First give the widget a name and configure. 
+    * Request method: POST.
+    * Request URL: [Your function URL]. Usually: https://mantis-cuscus-7403.twil.io/[your_function_name]
+    * Depending on data that you setup your function to log you will need to configure the HTTP parameters. In our case:
+      * triggerMessage: {{trigger.message.Body}}
+      * phoneNumber: {{widgets.askBenefit.inbound.From}} 
+      * language: {{flow.variables.language}}
+    * Next, configure the transitions. 
+ 4. Test it out! Check if your Airtable is logging the data. 
+
+
+
+
