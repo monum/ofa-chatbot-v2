@@ -6,7 +6,6 @@ Development of the next version of a chatbot for the Office of Food Access
 1. Another way to start, or once you have an initial diagram go ahead and use a digital tool to make it easier to edit and move things around. We used Lucidchart, but you could also use Figma, Visio, Google Slides, whatever works for you. A good starting point is a flowchart. Check out our latest [chatbot diagram](https://lucid.app/lucidchart/3b471da5-e2e9-48fe-9536-503505337aea/edit?viewport_loc=-823%2C-768%2C5410%2C3007%2C0_0&invitationId=inv_b741141a-96b7-455a-befb-4759efa12fcf) (things changed a bit when we moved to Twilio, but this is the most up-to-date version) 
 
 ## Getting Started with Twilio
-
 1. Create a Twilio account, if your department or organization already has an ‘Organization’ created ask to be added. For the City of Boston, ask to be added to the MONUM organization to access OFJ’s chatbot.
 
 1. To create a new flow or edit one, on the left-hand side navigation tab click on ‘Studio’ and then ‘[Flows](https://www.twilio.com/console/studio/flows)’. If this option is not available, click on ‘Explore Products’ and under Developer tools find ‘Studio’ and click the pin so it will be available next time. 
@@ -46,6 +45,8 @@ Development of the next version of a chatbot for the Office of Food Access
       * phoneNumber: {{widgets.askBenefit.inbound.From}} 
       * language: {{flow.variables.language}}
     * Next, configure the transitions. 
+<img width="178" alt="image" src="https://user-images.githubusercontent.com/87198109/201381664-0e2c6c98-dc14-42b0-ab06-741c1bbde102.png">
+
  4. Test it out! Check if your Airtable is logging the data. 
 
 
